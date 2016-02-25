@@ -1,5 +1,5 @@
-# Transmission with WebUI and OpenVPN
-Docker container which runs Transmission torrent client with WebUI while connecting to OpenVPN.
+# qBittorrent with WebUI and OpenVPN
+Docker container which runs qBittorrent torrent client with WebUI while connecting to OpenVPN.
 It bundles certificates and configurations for the following VPN providers:
 * Private Internet Access
 * BTGuard
@@ -13,7 +13,7 @@ It bundles certificates and configurations for the following VPN providers:
 * HideMe
 * PureVPN
 
-When using PIA as provider it will update Transmission hourly with assigned open port. Please read the instructions below.
+When using PIA as provider it will update Transmission hourly with assigned open  qBittorrent. Please read the instructions below.
 
 ## Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
