@@ -2,7 +2,9 @@
 set -x
 
 # create directory to store openvpn config files
-mkdir -p /config/openvpn
+if [ ! -d "/config/openvpn" ]; then
+  mkdir -p /config/openvpn
+fi
 
 #Locate first file with .ovpn extension
 export VPN_CONFIG=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
@@ -17,7 +19,6 @@ if [ "${OPENVPN_USERNAME}" = "**None**" ] || [ "${OPENVPN_PASSWORD}" = "**None**
  exit 1
 else
   echo "Setting OPENVPN credentials..."
-  mkdir -p /config
   echo $OPENVPN_USERNAME > /config/openvpn/credentials.conf
   echo $OPENVPN_PASSWORD >> /config/openvpn/credentials.conf
   chmod 775 /config/openvpn/credentials.conf
