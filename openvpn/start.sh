@@ -1,29 +1,14 @@
 #!/bin/sh
 set -x
-vpn_provider="$(echo $OPENVPN_PROVIDER | tr '[A-Z]' '[a-z]')"
-vpn_provider_configs="/etc/openvpn/$vpn_provider"
-if [ ! -d "$vpn_provider_configs" ]; then
-	echo "Could not find OpenVPN provider: $OPENVPN_PROVIDER"
-	echo "Please check your settings."
-	exit 1
-fi
 
-echo "Using OpenVPN provider: $OPENVPN_PROVIDER"
+# create directory to store openvpn config files
+mkdir -p /config/openvpn
 
-if [ ! -z "$OPENVPN_CONFIG" ]
-then
-	if [ -f $vpn_provider_configs/"${OPENVPN_CONFIG}".ovpn ]
-  	then
-		echo "Starting OpenVPN using config ${OPENVPN_CONFIG}.ovpn"
-		OPENVPN_CONFIG=$vpn_provider_configs/${OPENVPN_CONFIG}.ovpn
-	else
-		echo "Supplied config ${OPENVPN_CONFIG}.ovpn could not be found."
-		echo "Using default OpenVPN gateway for provider ${vpn_provider}"
-		OPENVPN_CONFIG=$vpn_provider_configs/default.ovpn
-	fi
-else
-	echo "No VPN configuration provided. Using default."
-	OPENVPN_CONFIG=$vpn_provider_configs/default.ovpn
+#Locate first file with .ovpn extension
+export VPN_CONFIG=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
+
+if [[ -z "${VPN_CONFIG}" ]]; then
+		echo "No ovpn file found. Add one to /config/openvpon abd restart this container, exiting..." | ts '%Y-%m-%d %H:%M:%.S' && exit 1
 fi
 
 # add OpenVPN user/pass
@@ -38,11 +23,4 @@ else
   chmod 600 /config/openvpn-credentials.txt
 fi
 
-# add transmission credentials from env vars
-echo $TRANSMISSION_RPC_USERNAME > /config/transmission-credentials.txt
-echo $TRANSMISSION_RPC_PASSWORD >> /config/transmission-credentials.txt
-
-# Persist transmission settings for use by transmission-daemon
-dockerize -template /etc/transmission/environment-variables.tmpl:/etc/transmission/environment-variables.sh /bin/true
-
-exec openvpn --config "$OPENVPN_CONFIG"
+exec openvpn --config "$VPN_CONFIG"
