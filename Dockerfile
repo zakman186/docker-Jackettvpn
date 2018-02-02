@@ -28,3 +28,4 @@ ENV OPENVPN_USERNAME=**None** \
 # Expose port and run
 EXPOSE 8080
 CMD ["/etc/openvpn/start.sh"]
+CMD ["/usr/bin/qbittorrent-nox -d"]
