@@ -18,9 +18,9 @@ if [ "${OPENVPN_USERNAME}" = "**None**" ] || [ "${OPENVPN_PASSWORD}" = "**None**
 else
   echo "Setting OPENVPN credentials..."
   mkdir -p /config
-  echo $OPENVPN_USERNAME > /config/openvpn-credentials.txt
-  echo $OPENVPN_PASSWORD >> /config/openvpn-credentials.txt
-  chmod 600 /config/openvpn-credentials.txt
+  echo $OPENVPN_USERNAME > /config/openvpn/credentials.conf
+  echo $OPENVPN_PASSWORD >> /config/openvpn/credentials.conf
+  chmod 775 /config/openvpn/credentials.conf
 fi
 
 exec openvpn --config "$VPN_CONFIG"
