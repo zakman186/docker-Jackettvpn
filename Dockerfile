@@ -5,7 +5,7 @@
 FROM ubuntu:16.04
 MAINTAINER MarkusMcNugen
 
-VOLUME /data
+VOLUME /downloads
 VOLUME /config
 
 # Update packages and install software
