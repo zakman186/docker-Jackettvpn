@@ -2,8 +2,8 @@
 #
 # Version 1.5
 
-FROM ubuntu:14.04
-MAINTAINER Kristian Haugene
+FROM ubuntu:16.04
+MAINTAINER MarkusMcNugen
 
 VOLUME /data
 VOLUME /config
@@ -13,9 +13,9 @@ RUN apt-get update \
     && apt-get -y install software-properties-common \
     && add-apt-repository ppa:qbittorrent-team/qbittorrent-stable \
     && apt-get update \
-    && apt-get install -y qbittorrent openvpn curl \
+    && apt-get install -y qbittorrent-nox openvpn curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && curl -L https://github.com/jwilder/dockerize/releases/download/v0.0.2/dockerize-linux-amd64-v0.0.2.tar.gz | tar -C /usr/local/bin -xzv
+#    && curl -L https://github.com/jwilder/dockerize/releases/download/v0.0.2/dockerize-linux-amd64-v0.0.2.tar.gz | tar -C /usr/local/bin -xzv
 
 # Add configuration and scripts
 ADD openvpn/ /etc/openvpn/
@@ -26,5 +26,5 @@ ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PROVIDER=**None** 
 
 # Expose port and run
-EXPOSE 9091
+EXPOSE 8080
 CMD ["/etc/openvpn/start.sh"]
