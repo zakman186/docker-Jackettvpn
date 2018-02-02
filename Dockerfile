@@ -19,7 +19,6 @@ RUN apt-get update \
 
 # Add configuration and scripts
 ADD openvpn/ /etc/openvpn/
-ADD qBittorrent/ /etc/qBittorrent/
 
 ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PASSWORD=**None** \
