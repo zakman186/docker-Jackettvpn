@@ -129,4 +129,6 @@ for name_server_item in "${name_server_list[@]}"; do
 done
 
 echo "[info] Starting OpenVPN..."
-exec openvpn --config "$VPN_CONFIG"
+exec openvpn --config "$VPN_CONFIG" &&
+exec /bin/bash /etc/qbittorrent/start.sh &&
+exec /bin/bash /etc/qbittorrent/iptables.sh
