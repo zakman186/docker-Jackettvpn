@@ -86,8 +86,8 @@ iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACC
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
 # accept input to deluge webui port 8112
-iptables -A INPUT -i eth0 -p tcp --dport 8112 -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --sport 8112 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
@@ -96,12 +96,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept input to deluge daemon port - used for lan access
-	iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport 58846 -j ACCEPT
-
-	# accept input to privoxy if enabled
-	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
-		iptables -A INPUT -i eth0 -p tcp -s "${lan_network_item}" -d "${docker_network_cidr}" -j ACCEPT
-	fi
+	iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport 8999 -j ACCEPT
 
 done
 
@@ -139,8 +134,8 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 fi
 
 # accept output from deluge webui port 8112 - used for lan access
-iptables -A OUTPUT -o eth0 -p tcp --dport 8112 -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 8112 -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
@@ -149,7 +144,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept output to deluge daemon port - used for lan access
-	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 58846 -j ACCEPT
+	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 8999 -j ACCEPT
 
 done
 
