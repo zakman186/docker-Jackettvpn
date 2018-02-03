@@ -27,7 +27,7 @@ echo "--------------------"
 ###
 
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "Modules currently loaded for kernel" ; lsmod
+	echo "[debug] Modules currently loaded for kernel" ; lsmod
 fi
 
 # check we have iptable_mangle, if so setup fwmark
@@ -36,7 +36,7 @@ iptable_mangle_exit_code=$?
 
 if [[ $iptable_mangle_exit_code == 0 ]]; then
 
-	echo "iptable_mangle support detected, adding fwmark for tables"
+	echo "[info] iptable_mangle support detected, adding fwmark for tables"
 
 	# setup route for deluge webui using set-mark to route traffic for port 8112 to eth0
 	echo "8112    webui" >> /etc/iproute2/rt_tables
@@ -48,24 +48,24 @@ fi
 # identify docker bridge interface name (probably eth0)
 docker_interface=$(netstat -ie | grep -vE "lo|tun|tap" | sed -n '1!p' | grep -P -o -m 1 '^[^:]+')
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "Docker interface defined as ${docker_interface}"
+	echo "[debug] Docker interface defined as ${docker_interface}"
 fi
 
 # identify ip for docker bridge interface
 docker_ip=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=inet\s)[^\s]+')
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "Docker IP defined as ${docker_ip}"
+	echo "[debug] Docker IP defined as ${docker_ip}"
 fi
 
 # identify netmask for docker bridge interface
 docker_mask=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=netmask\s)[^\s]+')
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "Docker netmask defined as ${docker_mask}"
+	echo "[debug] Docker netmask defined as ${docker_mask}"
 fi
 
 # convert netmask into cidr format
 docker_network_cidr=$(ipcalc "${docker_ip}" "${docker_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+")
-echo "Docker network defined as ${docker_network_cidr}"
+echo "[info] Docker network defined as ${docker_network_cidr}"
 
 # input iptable rules
 ###
@@ -164,7 +164,7 @@ iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
 # accept output from local loopback adapter
 iptables -A OUTPUT -o lo -j ACCEPT
 
-echo "iptables defined as follows..."
+echo "[info] iptables defined as follows..."
 echo "--------------------"
 iptables -S
 echo "--------------------"
