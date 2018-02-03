@@ -12,6 +12,8 @@ $ docker run --privileged  -d \
               -v /your/downloads/path/:/downloads \
               -e "OPENVPN_USERNAME=user" \
               -e "OPENVPN_PASSWORD=pass" \
+              -e PUID=<uid for user> \
+              -e PGID=<gid for user> \
               -p 8080:8080 \
               markusmcnugen/qbittorrentvpn
 ```
@@ -26,9 +28,11 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 |----------|----------|-------|
 |`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=asdf`|
 |`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=asdf`|
+|`PUID`|UID for config files |`OPENVPN_PASSWORD=asdf`|
+|`PGID`|GID for config files |`OPENVPN_PASSWORD=asdf`|
 
 ### Access the WebUI
-But what's going on? My http://my-host:9091 isn't responding?
+But what's going on? My http://IPADDRESS:8080 isn't responding?
 This is because the VPN is active, and since docker is running in a different ip range than your client the response
 to your request will be treated as "non-local" traffic and therefore be routed out through the VPN interface.
 
