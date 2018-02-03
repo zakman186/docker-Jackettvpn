@@ -151,11 +151,6 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	# accept output to deluge daemon port - used for lan access
 	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 58846 -j ACCEPT
 
-	# accept output from privoxy if enabled - used for lan access
-	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
-		iptables -A OUTPUT -o eth0 -p tcp -s "${docker_network_cidr}" -d "${lan_network_item}" -j ACCEPT
-	fi
-
 done
 
 # accept output for icmp (ping)
