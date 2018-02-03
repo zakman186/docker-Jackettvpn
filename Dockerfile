@@ -22,7 +22,7 @@ RUN apt-get update \
 ADD openvpn/ /etc/openvpn/
 ADD qbittorrent/ /etc/qbittorrent/
 
-RUN chmod +x /etc/qbittorrent/scripts/*.sh /etc/openvpn/*.sh
+RUN chmod +x /etc/qbittorrent/*.sh /etc/openvpn/*.sh
 
 ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PASSWORD=**None** \
