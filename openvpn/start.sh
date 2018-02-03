@@ -128,12 +128,7 @@ for name_server_item in "${name_server_list[@]}"; do
 
 done
 
-# Ensure scripts have correct perms
-chown root:root /etc/qbittorrent/start.sh
-chmod 755 /etc/qbittorrent/start.sh
-chmod +x /etc/qbittorrent/start.sh
-
 echo "[info] Starting OpenVPN..."
-exec openvpn --config "$VPN_CONFIG" #&& \
-#/bin/bash /etc/qbittorrent/start.sh && \
-#/bin/bash /etc/qbittorrent/iptables.sh
+exec openvpn --config "$VPN_CONFIG" && \
+/bin/bash /etc/qbittorrent/start.sh && \
+/bin/bash /etc/qbittorrent/iptables.sh
