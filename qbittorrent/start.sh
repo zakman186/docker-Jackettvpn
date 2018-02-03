@@ -20,16 +20,7 @@ else
 	chmod 644 /root/.config/qBittorrent/qBittorrent.conf
 fi
 
-while true; do
-	if [ -c /dev/net/tun ];
-		exec /bin/bash /etc/qbittorrent/iptables.sh
-		break
-	else
-		sleep 1
-	fi
-done
-
 trap trap_handler SIGINT SIGTERM SIGHUP 
 
 echo "[info] Starting qBittorrent daemon..."
-/usr/bin/qbittorrent-nox -d &&; wait
+/usr/bin/qbittorrent-nox -d &&
