@@ -1,5 +1,5 @@
 #!/bin/bash
-# Kanged from binhex's OpenVPN dockers
+# Forked from binhex's OpenVPN dockers
 
 # Wait until tunnel is up
 while : ; do
