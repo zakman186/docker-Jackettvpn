@@ -49,6 +49,7 @@ User ID (PUID) and Group ID (PGID) can be found by issuing the following command
 id <username>
 ```
 
+###Issues
 If you are having issues with this container please submit an issue on GitHub.
 Please provide logs, docker version and other information that can simplify reproducing the issue.
 Using the latest stable verison of Docker is always recommended. Support for older version is on a best-effort basis.
