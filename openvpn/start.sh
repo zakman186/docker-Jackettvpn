@@ -1,6 +1,6 @@
 #!/bin/bash
 # Kanged from binhex's OpenVPN dockers
-set -x
+set -e
 
 # check for presence of network interface docker0
 check_network=$(ifconfig | grep docker0 || true)
