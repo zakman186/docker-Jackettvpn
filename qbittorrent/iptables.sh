@@ -13,7 +13,7 @@ done
 # ip route
 ###
 
-DEBUG=true
+DEBUG=false
 
 
 # split comma seperated string into list from LAN_NETWORK env variable
