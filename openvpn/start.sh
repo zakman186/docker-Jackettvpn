@@ -132,7 +132,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	echo "[info] Starting OpenVPN..."
 	cd /config/openvpn
 	exec openvpn --config "$VPN_CONFIG" &
-	exec /bin/bash /etc/qbittorrent/scripts/iptables.sh
+	exec /bin/bash /etc/qbittorrent/iptables.sh
 else
-	exec /bin/bash /etc/qbittorrent/scripts/start.sh
+	exec /bin/bash /etc/qbittorrent/start.sh
 fi
