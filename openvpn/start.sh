@@ -130,5 +130,5 @@ done
 
 echo "[info] Starting OpenVPN..."
 exec openvpn --config "$VPN_CONFIG" &&
-exec /bin/bash /etc/qbittorrent/start.sh &&
-exec /bin/bash /etc/qbittorrent/iptables.sh
+/bin/bash /etc/qbittorrent/start.sh &&
+/bin/bash /etc/qbittorrent/iptables.sh
