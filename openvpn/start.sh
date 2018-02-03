@@ -139,13 +139,6 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 			export STRICT_PORT_FORWARD="yes"
 		fi
 	fi
-	export ENABLE_PRIVOXY=$(echo "${ENABLE_PRIVOXY}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-	if [[ ! -z "${ENABLE_PRIVOXY}" ]]; then
-		echo "[info] ENABLE_PRIVOXY defined as '${ENABLE_PRIVOXY}'" | ts '%Y-%m-%d %H:%M:%.S'
-	else
-		echo "[warn] ENABLE_PRIVOXY not defined (via -e ENABLE_PRIVOXY), defaulting to 'no'" | ts '%Y-%m-%d %H:%M:%.S'
-		export ENABLE_PRIVOXY="no"
-	fi
 elif [[ $VPN_ENABLED == "no" ]]; then
 	echo "[warn] !!IMPORTANT!! You have set the VPN to disabled, you will NOT be secure!" | ts '%Y-%m-%d %H:%M:%.S'
 fi
