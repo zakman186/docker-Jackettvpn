@@ -24,7 +24,6 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 ### Required environment options
 | Variable | Function | Example |
 |----------|----------|-------|
-|`OPENVPN_PROVIDER` | Sets the OpenVPN provider to use. | `OPENVPN_PROVIDER=provider`. Supported providers are `PIA`, `BTGUARD`, `TIGER`, `FROOT`, `TORGUARD`, `NORDVPN`, `USENETSERVER`, `IPVANISH`, `ANONINE`, `HIDEME` and `PUREVPN` |
 |`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=asdf`|
 |`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=asdf`|
 
@@ -70,8 +69,3 @@ $ docker run --privileged  -d \
 
 This will start a container as described in the "Run container from Docker registry" section.
 
-## Controlling Transmission remotely
-The container exposes /config as a volume. This is the directory where the supplied transmission and OpenVPN credentials will be stored.
-If you have transmission authentication enabled and want scripts in another container to access and
-control the transmission-daemon, this can be a handy way to access the credentials.
-For example, another container may pause or restrict transmission speeds while the server is streaming video.
