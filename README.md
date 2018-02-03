@@ -10,6 +10,7 @@ To run the container use this command:
 $ docker run --privileged  -d \
               -v /your/docker/config/path/:/config \
               -v /your/downloads/path/:/downloads \
+              -e "VPN_ENABLED=yes" \
               -e "OPENVPN_USERNAME=username" \
               -e "OPENVPN_PASSWORD=password" \
               -e "LAN_NETWORK=192.168.1.0/24" \
@@ -29,6 +30,7 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 ### Required environment options
 | Variable | Function | Example |
 |----------|----------|-------|
+|`VPN_ENABLED`|Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
 |`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=username`|
 |`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=password`|
 |`LAN_NETWORK`|Local Network with CIDR notation |`OPENVPN_PASSWORD=192.168.1.0/24`|
