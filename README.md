@@ -10,11 +10,14 @@ To run the container use this command:
 $ docker run --privileged  -d \
               -v /your/docker/config/path/:/config \
               -v /your/downloads/path/:/downloads \
-              -e "OPENVPN_USERNAME=user" \
-              -e "OPENVPN_PASSWORD=pass" \
-              -e PUID=<uid for user> \
-              -e PGID=<gid for user> \
+              -e "OPENVPN_USERNAME=username" \
+              -e "OPENVPN_PASSWORD=password" \
+              -e "LAN_NETWORK=192.168.1.0/24" \
+              -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
+              -e PUID=99 \
+              -e PGID=100 \
               -p 8080:8080 \
+              -p 8999:8999 \
               markusmcnugen/qbittorrentvpn
 ```
 
@@ -26,15 +29,15 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 ### Required environment options
 | Variable | Function | Example |
 |----------|----------|-------|
-|`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=asdf`|
-|`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=asdf`|
-|`PUID`|UID applied to config files |`OPENVPN_PASSWORD=asdf`|
-|`PGID`|GID applied to config files |`OPENVPN_PASSWORD=asdf`|
+|`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=username`|
+|`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=password`|
+|`LAN_NETWORK`|Local Network with CIDR notation |`OPENVPN_PASSWORD=192.168.1.0/24`|
+|`NAME_SERVERS`|Comma delimited name servers |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
+|`PUID`|UID applied to config files |`PUID=99`|
+|`PGID`|GID applied to config files |`PGID=100`|
 
 ### Access the WebUI
-But what's going on? My http://IPADDRESS:8080 isn't responding?
-This is because the VPN is active, and since docker is running in a different ip range than your client the response
-to your request will be treated as "non-local" traffic and therefore be routed out through the VPN interface.
+Access http://IPADDRESS:8080 from a browser on the same network
 
 ### Known issues
 Some have encountered problems with DNS resolving inside the docker container.
@@ -61,9 +64,12 @@ $ docker run --privileged  -d \
               -v /your/downloads/path/:/downloads \
               -e "OPENVPN_USERNAME=user" \
               -e "OPENVPN_PASSWORD=pass" \
+              -e "LAN_NETWORK=192.168.1.0/24" \
+              -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
               -e PUID=<uid for user> \
               -e PGID=<gid for user> \
               -p 8080:8080 \
+              -p 8999:8999 \
               qbittorrentvpn
 ```
 
