@@ -13,6 +13,10 @@ _handler() {
 
 trap _handler SIGINT SIGTERM SIGHUP 
 
+if [[ ! -e /config/qBittorrent ]]; then
+	mkdir -p /config/qBittorrent/config/
+fi
+
 if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 	yes | cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
 	chmod 755 /config/qBittorrent/config/qBittorrent.conf
