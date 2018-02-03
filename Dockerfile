@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Update packages and install software
 RUN apt-get update \
-    && add-apt-repository ppa:qbittorrent-team/qbittorrent-stable
+    && add-apt-repository ppa:qbittorrent-team/qbittorrent-stable \
     && apt-get update \
     && apt-get -y install software-properties-common \
     && apt-get install -y qbittorrent-nox openvpn curl moreutils net-tools dos2unix kmod iptables ipcalc \
