@@ -8,6 +8,8 @@ MAINTAINER MarkusMcNugen
 VOLUME /downloads
 VOLUME /config
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Update packages and install software
 RUN apt-get update \
     && apt-get -y install software-properties-common \
