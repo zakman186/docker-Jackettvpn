@@ -1,11 +1,10 @@
 #!/bin/bash
 set -e
 
-#function trap_handler
-#{
-#	echo "[info] Shutdown detected... copying config file to /config/qbittorrent" | ts '%Y-%m-%d %H:%M:%.S'
-#	yes | cp /root/.config/qBittorrent/qBittorrent.conf /config/qbittorrent/qBittorrent.conf
-#}
+_handler() {
+	echo "[info] Shutdown detected... copying config file to /config/qbittorrent" | ts '%Y-%m-%d %H:%M:%.S'
+	yes | cp /root/.config/qBittorrent/qBittorrent.conf /config/qbittorrent/qBittorrent.conf
+}
 
 # Make qbittorrent config directory
 mkdir -p /config/qbittorrent
@@ -27,7 +26,10 @@ else
 	chmod 644 /root/.config/qBittorrent/qBittorrent.conf
 fi
 
-#trap trap_handler SIGINT SIGTERM SIGHUP 
+trap trap_handler SIGINT SIGTERM SIGHUP 
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/usr/bin/qbittorrent-nox -d 
+/usr/bin/qbittorrent-nox &
+
+child=$(pgrep -o -x qbittorrent-nox) 
+wait "$child"
