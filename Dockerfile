@@ -28,4 +28,3 @@ EXPOSE 8999
 EXPOSE 8999/udp
 CMD ["/etc/openvpn/start.sh"]
 CMD ["/etc/qbittorrent/start.sh"]
-CMD ["/etc/qbittorrent/stop.sh"]
