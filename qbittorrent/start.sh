@@ -25,7 +25,7 @@ while true; do
 		exec /bin/bash /etc/qbittorrent/iptables.sh
 		break
 	else
-		sleep 5
+		sleep 1
 	fi
 done
 
