@@ -166,3 +166,5 @@ echo "[info] iptables defined as follows..."
 echo "--------------------"
 iptables -S
 echo "--------------------"
+
+exec /bin/bash /etc/qbittorrent/startup.sh
