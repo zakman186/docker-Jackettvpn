@@ -2,8 +2,9 @@
 
  function trap_handler
  {
-     echo "Shutdown detected... copying config file to /config/qbittorrent"
+     echo "[info] Shutdown detected... copying config file to /config/qbittorrent"
      cp /home/$USER/.config/qBittorrent/qBittorrent.conf /config/qbittorrent/qBittorrent.conf
+     exit 0
  }
 
  trap trap_handler SIGINT SIGTERM SIGHUP 
