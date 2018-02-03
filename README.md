@@ -20,12 +20,10 @@ $ docker run --privileged  -d \
               markusmcnugen/qbittorrentvpn
 ```
 
-You must set the environment variables `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` to provide basic connection details.
-
 As you can see, the container also expects a downloads volume to be mounted.
-This is where qBittorrent will store your downloads, incomplete downloads and look for a watch directory for new .torrent files.
+This is where qBittorrent will store your downloads, incomplete downloads and/or a watch directory for new .torrent files.
 
-### Required environment options
+### Environment Variables
 | Variable | Function | Example |
 |----------|----------|-------|
 |`VPN_ENABLED`|Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
@@ -37,11 +35,21 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
 
-### Default credentials
+### Default Credentials
 | Credential | Default Value |
 |----------|----------|
 |`WebUI Username`|admin |
 |`WebUI Password`|adminadmin |
+
+## How to use OpenVPN
+The container will fail to boot if `VPN_ENABLED` is set to anything other than no and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
+
+### Example auth-user-pass option
+`auth-user-pass credentials.conf`
+
+### Example credentials.conf
+username
+password
 
 ## PUID/PGID
 User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
