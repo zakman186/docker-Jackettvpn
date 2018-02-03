@@ -1,9 +1,7 @@
 #!/bin/bash
 # Kanged from binhex's OpenVPN dockers
 
-# ip route
-###
-
+# Wait until tunnel is up
 while : ; do
 	if [ -c /dev/net/tun ]; then
 		break
@@ -11,6 +9,9 @@ while : ; do
 		sleep 1
 	fi
 done
+
+# ip route
+###
 
 # split comma seperated string into list from LAN_NETWORK env variable
 IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
