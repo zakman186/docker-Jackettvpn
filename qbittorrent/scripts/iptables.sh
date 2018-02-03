@@ -3,7 +3,8 @@
 
 # Wait until tunnel is up
 while : ; do
-	if [ -c /dev/net/tun ]; then
+	tunnelstat=$(netstat -ie | grep -E "tun|tap")
+	if [[ ! -z "${tunnelstat}" ]]; then
 		break
 	else
 		sleep 1
