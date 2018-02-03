@@ -2,7 +2,7 @@ openvpn:
   image: markusmcnugen/qbittorrentvpn
   privileged: true
   ports:
-    - "9091:9091"
+    - "8080:8080"
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - /your/config/path/:/config
