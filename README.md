@@ -11,8 +11,6 @@ $ docker run --privileged  -d \
               -v /your/docker/config/path/:/config \
               -v /your/downloads/path/:/downloads \
               -e "VPN_ENABLED=yes" \
-              -e "OPENVPN_USERNAME=username" \
-              -e "OPENVPN_PASSWORD=password" \
               -e "LAN_NETWORK=192.168.1.0/24" \
               -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
               -e "PUID=99" \
@@ -31,8 +29,6 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 | Variable | Function | Example |
 |----------|----------|-------|
 |`VPN_ENABLED`|Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
-|`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=username`|
-|`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=password`|
 |`LAN_NETWORK`|Local Network with CIDR notation |`OPENVPN_PASSWORD=192.168.1.0/24`|
 |`NAME_SERVERS`|Comma delimited name servers |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
 |`PUID`|UID applied to config files |`PUID=99`|
@@ -72,8 +68,6 @@ $ docker build -t qbittorrentvpn .
 $ docker run --privileged  -d \
               -v /your/docker/config/path/:/config \
               -v /your/downloads/path/:/downloads \
-              -e "OPENVPN_USERNAME=user" \
-              -e "OPENVPN_PASSWORD=pass" \
               -e "LAN_NETWORK=192.168.1.0/24" \
               -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
               -e "PUID=99" \
