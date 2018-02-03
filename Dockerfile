@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Update packages and install software
 RUN apt-get update \
     && apt-get -y install software-properties-common \
-    && apt-get install -y qbittorrent-nox openvpn curl moreutils net-tools dos2unix \
+    && apt-get install -y qbittorrent-nox openvpn curl moreutils net-tools dos2unix kmod iptables \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add configuration and scripts
