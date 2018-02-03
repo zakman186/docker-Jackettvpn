@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Kanged from binhex's OpenVPN dockers
 set -x
 
