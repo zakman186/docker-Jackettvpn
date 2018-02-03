@@ -4,7 +4,7 @@
 # ip route
 ###
 
-while true; do
+while : ; do
 	if [ -c /dev/net/tun ]; then
 		break
 	else
