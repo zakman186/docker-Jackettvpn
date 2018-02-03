@@ -26,7 +26,7 @@ else
 	chmod 644 /root/.config/qBittorrent/qBittorrent.conf
 fi
 
-trap trap_handler SIGINT SIGTERM SIGHUP 
+trap _handler SIGINT SIGTERM SIGHUP 
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 /usr/bin/qbittorrent-nox &
