@@ -134,6 +134,6 @@ chmod 755 /etc/qbittorrent/start.sh
 chmod +x /etc/qbittorrent/start.sh
 
 echo "[info] Starting OpenVPN..."
-exec openvpn --config "$VPN_CONFIG" && \
-/bin/bash /etc/qbittorrent/start.sh && \
-/bin/bash /etc/qbittorrent/iptables.sh
+exec openvpn --config "$VPN_CONFIG" #&& \
+#/bin/bash /etc/qbittorrent/start.sh && \
+#/bin/bash /etc/qbittorrent/iptables.sh
