@@ -39,11 +39,15 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 ### Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network
 
-### Known issues
-Some have encountered problems with DNS resolving inside the docker container.
-This causes trouble because OpenVPN will not be able to resolve the host to connect to.
-If you have this problem use dockers --dns flag to override the resolv.conf of the container.
-For example use googles dns servers by adding --dns 8.8.8.8 --dns 8.8.4.4 as parameters to the usual run command.
+Default username is admin
+Default password is adminadmin
+
+### PUID/PGID
+User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
+
+```
+id <username>
+```
 
 If you are having issues with this container please submit an issue on GitHub.
 Please provide logs, docker version and other information that can simplify reproducing the issue.
