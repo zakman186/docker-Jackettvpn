@@ -36,21 +36,23 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 |`PUID`|UID applied to config files |`PUID=99`|
 |`PGID`|GID applied to config files |`PGID=100`|
 
-### Access the WebUI
+## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
 
-Default username is admin
+### Default credentials
+| Credential | Default Value |
+|----------|----------|
+|`WebUI Username`|admin |
+|`WebUI Password`|adminadmin |
 
-Default password is adminadmin
-
-### PUID/PGID
+## PUID/PGID
 User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
 
 ```
 id <username>
 ```
 
-###Issues
+## Issues
 If you are having issues with this container please submit an issue on GitHub.
 Please provide logs, docker version and other information that can simplify reproducing the issue.
 Using the latest stable verison of Docker is always recommended. Support for older version is on a best-effort basis.
