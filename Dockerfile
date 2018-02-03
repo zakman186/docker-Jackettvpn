@@ -22,8 +22,10 @@ ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PASSWORD=**None** \
     OPENVPN_PROVIDER=**None** 
 
-# Expose port and run
+# Expose ports and run
 EXPOSE 8080
+EXPOSE 8999
+EXPOSE 8999/udp
 CMD ["/etc/openvpn/start.sh"]
 CMD ["/etc/qbittorrent/start.sh"]
 CMD ["/etc/qbittorrent/stop.sh"]
