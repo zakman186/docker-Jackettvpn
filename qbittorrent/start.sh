@@ -16,5 +16,15 @@ trap _handler SIGINT SIGTERM SIGHUP
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 /usr/bin/qbittorrent-nox --profile=/config &
 
+while true; do
+	if [ -e /config/qBittorrent ]; then
+		chmod -R 755 /config/qBittorrent
+		chown -R 99:100 /config/qBittorrent
+		break
+	else
+		sleep 1
+	fi
+done
+
 child=$(pgrep -o -x qbittorrent-nox) 
 wait "$child"
