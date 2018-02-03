@@ -1,6 +1,6 @@
-# Transmission and OpenVPN
+# qBittorrent and OpenVPN
 #
-# Version 1.5
+# Version 1.0
 
 FROM ubuntu:16.04
 MAINTAINER MarkusMcNugen
