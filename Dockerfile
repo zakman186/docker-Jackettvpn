@@ -11,7 +11,7 @@ VOLUME /config
 # Update packages and install software
 RUN apt-get update \
     && apt-get -y install software-properties-common \
-    && apt-get install -y qbittorrent-nox openvpn curl \
+    && apt-get install -y qbittorrent-nox openvpn curl moreutils \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add configuration and scripts
