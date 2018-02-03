@@ -16,6 +16,7 @@ RUN apt-get update \
 
 # Add configuration and scripts
 ADD openvpn/ /etc/openvpn/
+ADD qbittorrent/ /etc/qbittorrent/
 
 ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PASSWORD=**None** \
@@ -24,4 +25,5 @@ ENV OPENVPN_USERNAME=**None** \
 # Expose port and run
 EXPOSE 8080
 CMD ["/etc/openvpn/start.sh"]
-CMD ["/usr/bin/qbittorrent-nox -d"]
+CMD ["/etc/qbittorrent/start.sh"]
+CMD ["/etc/qbittorrent/stop.sh"]
