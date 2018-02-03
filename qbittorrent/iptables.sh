@@ -4,6 +4,14 @@
 # ip route
 ###
 
+while true; do
+	if [ -c /dev/net/tun ];
+		break
+	else
+		sleep 1
+	fi
+done
+
 # split comma seperated string into list from LAN_NETWORK env variable
 IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
 
