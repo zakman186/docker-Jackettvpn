@@ -10,5 +10,5 @@
 
  while true
  do
-      sleep 60
+      sleep 10
  done
