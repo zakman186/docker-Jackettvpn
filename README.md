@@ -27,11 +27,6 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 |`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=asdf`|
 |`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=asdf`|
 
-### Network configuration options
-| Variable | Function | Example |
-|----------|----------|-------|
-|`OPENVPN_CONFIG` | Sets the OpenVPN endpoint to connect to. | `OPENVPN_CONFIG=UK Southampton`|
-
 ### Access the WebUI
 But what's going on? My http://my-host:9091 isn't responding?
 This is because the VPN is active, and since docker is running in a different ip range than your client the response
