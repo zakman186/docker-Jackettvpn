@@ -23,4 +23,4 @@ fi
 trap trap_handler SIGINT SIGTERM SIGHUP 
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/usr/bin/qbittorrent-nox -d &&
+/usr/bin/qbittorrent-nox -d &&; wait
