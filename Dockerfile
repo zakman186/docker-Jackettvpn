@@ -24,10 +24,6 @@ ADD qbittorrent/ /etc/qbittorrent/
 
 RUN chmod +x /etc/qbittorrent/*.sh /etc/openvpn/*.sh
 
-ENV OPENVPN_PROVIDER=**None** 
-ENV QBT_SAVE_PATH=/downloads
-ENV QBT_TEMP_PATH=/downloads/temp
-
 # Expose ports and run
 EXPOSE 8080
 EXPOSE 8999
