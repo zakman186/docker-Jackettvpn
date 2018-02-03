@@ -1,19 +1,5 @@
 # qBittorrent with WebUI and OpenVPN
 Docker container which runs qBittorrent torrent client with WebUI while connecting to OpenVPN.
-It bundles certificates and configurations for the following VPN providers:
-* Private Internet Access
-* BTGuard
-* TigerVPN
-* FrootVPN
-* TorGuard
-* NordVPN
-* UsenetServerVPN
-* IPVanish
-* Anonine
-* HideMe
-* PureVPN
-
-When using PIA as provider it will update Transmission hourly with assigned open  qBittorrent. Please read the instructions below.
 
 ## Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
@@ -21,24 +7,18 @@ To run the container use this command:
 
 ```
 $ docker run --privileged  -d \
-              -v /your/storage/path/:/data \
-              -e "OPENVPN_PROVIDER=PIA" \
-              -e "OPENVPN_CONFIG=Netherlands" \
+              -v /your/docker/config/path/:/config \
+              -v /your/downloads/path/:/downloads \
               -e "OPENVPN_USERNAME=user" \
               -e "OPENVPN_PASSWORD=pass" \
-              -p 9091:9091 \
-              hayduck/qbittorrent-openvpn
+              -p 8080:8080 \
+              markusmcnugen/qbittorrentvpn
 ```
 
-You must set the environment variables `OPENVPN_PROVIDER`, `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` to provide basic connection details.
+You must set the environment variables `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` to provide basic connection details.
 
-The `OPENVPN_CONFIG` is an optional variable. If no config is given, a default config will be selected for the provider you have chosen.
-Find available OpenVPN configurations by looking in the openvpn folder of the GitHub repository.
-
-As you can see, the container also expects a data volume to be mounted.
-This is where Transmission will store your downloads, incomplete downloads and look for a watch directory for new .torrent files.
-By default a folder named transmission-home will also be created under /data, this is where Transmission stores its state.
-
+As you can see, the container also expects a downloads volume to be mounted.
+This is where qBittorrent will store your downloads, incomplete downloads and look for a watch directory for new .torrent files.
 
 ### Required environment options
 | Variable | Function | Example |
