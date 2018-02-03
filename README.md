@@ -14,8 +14,8 @@ $ docker run --privileged  -d \
               -e "OPENVPN_PASSWORD=password" \
               -e "LAN_NETWORK=192.168.1.0/24" \
               -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
-              -e PUID=99 \
-              -e PGID=100 \
+              -e "PUID=99" \
+              -e "PGID=100" \
               -p 8080:8080 \
               -p 8999:8999 \
               markusmcnugen/qbittorrentvpn
@@ -66,8 +66,8 @@ $ docker run --privileged  -d \
               -e "OPENVPN_PASSWORD=pass" \
               -e "LAN_NETWORK=192.168.1.0/24" \
               -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
-              -e PUID=<uid for user> \
-              -e PGID=<gid for user> \
+              -e "PUID=99" \
+              -e "PGID=100" \
               -p 8080:8080 \
               -p 8999:8999 \
               qbittorrentvpn
