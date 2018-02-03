@@ -14,20 +14,25 @@ done
 ###
 
 DEBUG=true
-DEFAULT_GATEWAY=$(ip -4 route list 0/0 | cut -d ' ' -f 3)
+
 
 # split comma seperated string into list from LAN_NETWORK env variable
 IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
 
+lancount=0
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
 
+	# get default gateway of interfaces as looping through them
+	DEFAULT_GATEWAY=$(ip -4 route list 0/${lancount} | cut -d ' ' -f 3)
+	
 	# strip whitespace from start and end of lan_network_item
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	echo "[info] Adding ${lan_network_item} as route via docker eth0"
 	ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY}" dev eth0
 
+	lancount=$((lancount+1))
 done
 
 echo "[info] ip route defined as follows..." | ts '%Y-%m-%d %H:%M:%.S'
