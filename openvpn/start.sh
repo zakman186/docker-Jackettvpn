@@ -114,5 +114,19 @@ elif [[ $VPN_ENABLED == "no" ]]; then
 	echo "[warn] !!IMPORTANT!! You have set the VPN to disabled, you will NOT be secure!" | ts '%Y-%m-%d %H:%M:%.S'
 fi
 
+# split comma seperated string into list from NAME_SERVERS env variable
+IFS=',' read -ra name_server_list <<< "${NAME_SERVERS}"
+
+# process name servers in the list
+for name_server_item in "${name_server_list[@]}"; do
+
+	# strip whitespace from start and end of lan_network_item
+	name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
+	echo "[info] Adding ${name_server_item} to resolv.conf"
+	echo "nameserver ${name_server_item}" >> /etc/resolv.conf
+
+done
+
 echo "[info] Starting OpenVPN..."
 exec openvpn --config "$VPN_CONFIG"
