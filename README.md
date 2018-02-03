@@ -1,3 +1,4 @@
+
 # qBittorrent with WebUI and OpenVPN
 Docker container which runs qBittorrent torrent client with WebUI while connecting to OpenVPN.
 
@@ -32,61 +33,12 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 |----------|----------|-------|
 |`OPENVPN_CONFIG` | Sets the OpenVPN endpoint to connect to. | `OPENVPN_CONFIG=UK Southampton`|
 
-### Transmission configuration options
-
-You may override transmission options by setting the appropriate environment variable.
-
-The environment variables are the same name as used in the transmission settings.json file
-and follow the format given in these examples:
-
-| Transmission variable name | Environment variable name |
-|----------------------------|---------------------------|
-| `speed-limit-up` | `TRANSMISSION_SPEED_LIMIT_UP` |
-| `speed-limit-up-enabled` | `TRANSMISSION_SPEED_LIMIT_UP_ENABLED` |
-| `ratio-limit` | `TRANSMISSION_RATIO_LIMIT` |
-| `ratio-limit-enabled` | `TRANSMISSION_RATIO_LIMIT_ENABLED` |
-
-As you can see the variables are prefixed with `TRANSMISSION_`, the variable is capitalized, and `-` is converted to `_`.
-
-PS: `TRANSMISSION_BIND_ADDRESS_IPV4` will be overridden to the IP assigned to your OpenVPN tunnel interface.
-This is to prevent leaking the host IP.
-
-## Access the WebUI
+### Access the WebUI
 But what's going on? My http://my-host:9091 isn't responding?
 This is because the VPN is active, and since docker is running in a different ip range than your client the response
 to your request will be treated as "non-local" traffic and therefore be routed out through the VPN interface.
 
-### How to fix this
-There are several ways to fix this. You can pipe and do fancy iptables or ip route configurations on the host and in
-the container. But I found that the simplest solution is just to proxy my traffic. Start an nginx container like this:
-
-```
-$ docker run -d \
-      -v /path/to/nginx.conf:/etc/nginx/nginx.conf:ro \
-      -p 8080:8080 \
-      nginx
-```
-
-Where /path/to/nginx.conf has this content:
-
-```
-events {
-  worker_connections 1024;
-}
-
-http {
-  server {
-    listen 8080;
-    location / {
-      proxy_pass http://host.ip.address.here:9091;
-    }
-  }
-}
-```
-Your Transmission WebUI should now be avaliable at "your.host.ip.addr:8080/transmission/web/".
-Change the port in the docker run command if 8080 is not suitable for you.
-
-## Known issues
+### Known issues
 Some have encountered problems with DNS resolving inside the docker container.
 This causes trouble because OpenVPN will not be able to resolve the host to connect to.
 If you have this problem use dockers --dns flag to override the resolv.conf of the container.
