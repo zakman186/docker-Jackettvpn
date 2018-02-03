@@ -63,26 +63,26 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 fi
 
 # identify docker bridge interface name (probably eth0)
-# docker_interface=$(netstat -ie | grep -vE "lo|tun|tap" | sed -n '1!p' | grep -P -o -m 1 '^[^:]+')
-# if [[ "${DEBUG}" == "true" ]]; then
-#	echo "[debug] Docker interface defined as ${docker_interface}"
-# fi
+ docker_interface=$(netstat -ie | grep -vE "lo|tun|tap" | sed -n '1!p' | grep -P -o -m 1 '^[\w]+')
+if [[ "${DEBUG}" == "true" ]]; then
+	echo "[debug] Docker interface defined as ${docker_interface}"
+fi
 
 # identify ip for docker bridge interface
-# docker_ip=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=inet\s)[^\s]+')
-# if [[ "${DEBUG}" == "true" ]]; then
-# 	echo "[debug] Docker IP defined as ${docker_ip}"
-# fi
+docker_ip=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=inet\saddr:)[^\s]+')
+if [[ "${DEBUG}" == "true" ]]; then
+ 	echo "[debug] Docker IP defined as ${docker_ip}"
+fi
 
 # identify netmask for docker bridge interface
-# docker_mask=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=netmask\s)[^\s]+')
-# if [[ "${DEBUG}" == "true" ]]; then
-#	echo "[debug] Docker netmask defined as ${docker_mask}"
-# fi
+docker_mask=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=Mask:)[^\s]+')
+if [[ "${DEBUG}" == "true" ]]; then
+	echo "[debug] Docker netmask defined as ${docker_mask}"
+fi
 
 # convert netmask into cidr format
-# docker_network_cidr=$(ipcalc "${docker_ip}" "${docker_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+")
-# echo "[info] Docker network defined as ${docker_network_cidr}" | ts '%Y-%m-%d %H:%M:%.S'
+docker_network_cidr=$(ipcalc "${docker_ip}" "${docker_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+echo "[info] Docker network defined as ${docker_network_cidr}" | ts '%Y-%m-%d %H:%M:%.S'
 
 # input iptable rules
 ###
@@ -97,7 +97,7 @@ ip6tables -P INPUT DROP 1>&- 2>&-
 iptables -A INPUT -i "${VPN_DEVICE_TYPE}" -j ACCEPT
 
 # accept input to/from docker containers (172.x range is internal dhcp)
-# iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
+iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
@@ -136,7 +136,7 @@ ip6tables -P OUTPUT DROP 1>&- 2>&-
 iptables -A OUTPUT -o "${VPN_DEVICE_TYPE}" -j ACCEPT
 
 # accept output to/from docker containers (172.x range is internal dhcp)
-# iptables -A OUTPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
+iptables -A OUTPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept output from vpn gateway
 iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
