@@ -5,7 +5,7 @@
 ###
 
 while true; do
-	if [ -c /dev/net/tun ];
+	if [ -c /dev/net/tun ]; then
 		break
 	else
 		sleep 1
