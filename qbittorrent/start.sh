@@ -12,7 +12,6 @@ _handler() {
 }
 
 trap _handler SIGINT SIGTERM SIGHUP 
-
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 /usr/bin/qbittorrent-nox --profile=/config &
 
