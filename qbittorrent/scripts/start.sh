@@ -22,7 +22,6 @@ if [[ ! -f /config/qbittorrent/qBittorrent.conf ]]; then
 # Else create directories and copy conf from config volume
 else
 	echo "qBittorrent config file exists in /config, copying to qbittorrent config directory" | ts '%Y-%m-%d %H:%M:%.S'
-	mkdir -p /root/.config
 	mkdir -p /root/.config/qBittorrent/
 	yes | cp /config/qbittorrent/qBittorrent.conf /root/.config/qBittorrent/qBittorrent.conf
 	chmod 644 /root/.config/qBittorrent/qBittorrent.conf
