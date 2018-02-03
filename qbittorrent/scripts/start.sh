@@ -11,9 +11,6 @@ _handler() {
 	fi
 }
 
-# Make qbittorrent config directory
-mkdir -p /config/qbittorrent
-
 trap _handler SIGINT SIGTERM SIGHUP 
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
