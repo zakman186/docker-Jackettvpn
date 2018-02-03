@@ -1,6 +1,7 @@
 #!/bin/bash
+set -x
 
- function trap_handler
+function trap_handler
  {
      echo "[info] Shutdown detected... copying config file to /config/qbittorrent"
      yes | cp /root/.config/qBittorrent/qBittorrent.conf /config/qbittorrent/qBittorrent.conf
