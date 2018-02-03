@@ -14,6 +14,7 @@ done
 ###
 
 DEBUG=true
+DEFAULT_GATEWAY=$(ip -4 route list 0/0 | cut -d ' ' -f 3)
 
 # split comma seperated string into list from LAN_NETWORK env variable
 IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
