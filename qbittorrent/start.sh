@@ -7,7 +7,7 @@ _handler() {
 	if [[ -e /config/qBittorrent ]]; then
 		echo "[info] qBittorrent directory exists in /config, applying ownership and permissions before exit" | ts '%Y-%m-%d %H:%M:%.S'
 		chmod -R 755 /config/qBittorrent
-		chown -R 99:100 /config/qBittorrent
+		chown -R $PUID:$PGID /config/qBittorrent
 	fi
 }
 
