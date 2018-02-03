@@ -1,6 +1,6 @@
 
 # qBittorrent with WebUI and OpenVPN
-Docker container which runs qBittorrent torrent client with WebUI while connecting to OpenVPN.
+Docker container which runs a headless qBittorrent client with WebUI while connecting to OpenVPN.
 
 ## Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
@@ -28,8 +28,8 @@ This is where qBittorrent will store your downloads, incomplete downloads and lo
 |----------|----------|-------|
 |`OPENVPN_USERNAME`|Your OpenVPN username |`OPENVPN_USERNAME=asdf`|
 |`OPENVPN_PASSWORD`|Your OpenVPN password |`OPENVPN_PASSWORD=asdf`|
-|`PUID`|UID for config files |`OPENVPN_PASSWORD=asdf`|
-|`PGID`|GID for config files |`OPENVPN_PASSWORD=asdf`|
+|`PUID`|UID applied to config files |`OPENVPN_PASSWORD=asdf`|
+|`PGID`|GID applied to config files |`OPENVPN_PASSWORD=asdf`|
 
 ### Access the WebUI
 But what's going on? My http://IPADDRESS:8080 isn't responding?
@@ -51,19 +51,20 @@ To build this container, clone the repository and cd into it.
 
 ### Build it:
 ```
-$ cd /repo/location/docker-transmission-openvpn
-$ docker build -t transmission-openvpn .
+$ cd /repo/location/qbittorrentvpn
+$ docker build -t qbittorrentvpn .
 ```
 ### Run it:
 ```
 $ docker run --privileged  -d \
-              -v /your/storage/path/:/data \
-              -e "OPENVPN_PROVIDER=PIA" \
-              -e "OPENVPN_CONFIG=Netherlands" \
+              -v /your/docker/config/path/:/config \
+              -v /your/downloads/path/:/downloads \
               -e "OPENVPN_USERNAME=user" \
               -e "OPENVPN_PASSWORD=pass" \
-              -p 9091:9091 \
-              transmission-openvpn
+              -e PUID=<uid for user> \
+              -e PGID=<gid for user> \
+              -p 8080:8080 \
+              qbittorrentvpn
 ```
 
 This will start a container as described in the "Run container from Docker registry" section.
