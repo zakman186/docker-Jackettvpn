@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -e
 
 function trap_handler
 {
