@@ -18,7 +18,7 @@ if [[ ! -e /config/qBittorrent ]]; then
 fi
 
 if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
-	yes | cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
+	/bin/cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
 	chmod 755 /config/qBittorrent/config/qBittorrent.conf
 	chown -R $PUID:$PGID /config/qBittorrent/config/qBittorrent.conf
 fi
