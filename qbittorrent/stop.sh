@@ -3,7 +3,7 @@
  function trap_handler
  {
      echo "[info] Shutdown detected... copying config file to /config/qbittorrent"
-     cp /home/$USER/.config/qBittorrent/qBittorrent.conf /config/qbittorrent/qBittorrent.conf
+     cp /root/.config/qBittorrent/qBittorrent.conf /config/qbittorrent/qBittorrent.conf
      exit 0
  }
 
