@@ -128,6 +128,16 @@ for name_server_item in "${name_server_list[@]}"; do
 
 done
 
+if [[ -z "${PUID}" ]]; then
+	echo "[info] PUID not defined. Defaulting to root user" | ts '%Y-%m-%d %H:%M:%.S'
+	export PUID="root"
+fi
+
+if [[ -z "${PGID}" ]]; then
+	echo "[info] PGID not defined. Defaulting to root group" | ts '%Y-%m-%d %H:%M:%.S'
+	export PGID="root"
+fi
+
 if [[ $VPN_ENABLED == "yes" ]]; then
 	echo "[info] Starting OpenVPN..." | ts '%Y-%m-%d %H:%M:%.S'
 	cd /config/openvpn
