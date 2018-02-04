@@ -32,6 +32,12 @@ This is where qBittorrent will store your downloads, incomplete downloads and/or
 |`PUID`| No | UID applied to config files and downloads |`PUID=99`|
 |`PGID`| No | GID applied to config files and downloads |`PGID=100`|
 
+### Volumes
+| Volume | Required| Function | Example |
+|----------|----------|----------|----------|
+| `config` | Yes | qBittorrent and OpenVPN config files | `VPN_ENABLED=yes`|
+| `downloads` | No | Default download path for torrents | `VPN_ENABLED=yes`|
+
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
 
