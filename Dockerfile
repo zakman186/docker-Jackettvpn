@@ -10,7 +10,6 @@ VOLUME /config
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN groupadd -g 100 users
 RUN useradd -s /bin/bash -u 99 -g 100 nobody
 
 # Update packages and install software
