@@ -39,7 +39,6 @@ if test -e /etc/default/openvpn ; then
 fi
 
 start_vpn () {
-	
     if grep -q '^[       ]*daemon' $CONFIG_DIR/$NAME.ovpn ; then
       # daemon already given in config file
       DAEMONARG=
