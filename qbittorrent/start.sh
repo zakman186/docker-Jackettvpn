@@ -11,7 +11,7 @@ _handler() {
 	fi
 }
 
-#trap _handler SIGINT SIGTERM SIGHUP 
+trap _handler SIGINT SIGTERM SIGHUP 
 
 if [[ ! -e /config/qBittorrent ]]; then
 	mkdir -p /config/qBittorrent/config/
@@ -36,5 +36,5 @@ while true; do
 	fi
 done
 
-#child=$(pgrep -o -x qbittorrent-nox) 
-#wait "$child"
+child=$(pgrep -o -x qbittorrent-nox) 
+wait "$child"
