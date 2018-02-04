@@ -31,7 +31,7 @@ test -x $DAEMON || exit 0
 test -d $CONFIG_DIR || exit 0
 
 # Source defaults file; edit that file to configure this script.
-AUTOSTART=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
+AUTOSTART=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -printf "%f\n" -quit)
 STATUSREFRESH=10
 OMIT_SENDSIGS=0
 if test -e /etc/default/openvpn ; then
