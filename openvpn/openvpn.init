@@ -39,7 +39,7 @@ if test -e /etc/default/openvpn ; then
 fi
 
 start_vpn () {
-	OPENVPNLOG="/var/log/openvpn.log"
+	OPENVPNLOG="/config/openvpn/$NAME.log"
 	
     if grep -q '^[       ]*daemon' $CONFIG_DIR/$NAME.ovpn ; then
       # daemon already given in config file
@@ -91,7 +91,7 @@ start_vpn () {
         --pidfile /run/openvpn/$NAME.pid \
         --exec $DAEMON -- $OPTARGS --writepid /run/openvpn/$NAME.pid \
         $DAEMONARG $STATUSARG --cd $CONFIG_DIR \
-        --config $CONFIG_DIR/$NAME.ovpn $script_security >> $QBTLOG 2>&1 < /dev/null || STATUS=1
+        --config $CONFIG_DIR/$NAME.ovpn $script_security >> $OPENVPNLOG 2>&1 < /dev/null || STATUS=1
 
     [ "$OMIT_SENDSIGS" -ne 1 ] || ln -s /run/openvpn/$NAME.pid /run/sendsigs.omit.d/openvpn.$NAME.pid
 
