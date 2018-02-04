@@ -24,7 +24,7 @@ if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/usr/bin/qbittorrent-nox --profile=/config &
+/etc/qbittorrent/qbittorrent.init &
 
 while true; do
 	if [ -e /config/qBittorrent ]; then
