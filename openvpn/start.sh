@@ -123,13 +123,13 @@ for name_server_item in "${name_server_list[@]}"; do
 	# strip whitespace from start and end of lan_network_item
 	name_server_item=$(echo "${name_server_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-	echo "[info] Adding ${name_server_item} to resolv.conf"
+	echo "[info] Adding ${name_server_item} to resolv.conf" | ts '%Y-%m-%d %H:%M:%.S'
 	echo "nameserver ${name_server_item}" >> /etc/resolv.conf
 
 done
 
 if [[ $VPN_ENABLED == "yes" ]]; then
-	echo "[info] Starting OpenVPN..."
+	echo "[info] Starting OpenVPN..." | ts '%Y-%m-%d %H:%M:%.S'
 	cd /config/openvpn
 	exec openvpn --config "$VPN_CONFIG" &
 	exec /bin/bash /etc/qbittorrent/iptables.sh
