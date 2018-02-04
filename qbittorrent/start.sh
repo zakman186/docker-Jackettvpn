@@ -7,7 +7,7 @@ _handler() {
 	if [[ -e /config/qBittorrent ]]; then
 		echo "[info] qBittorrent directory exists in /config, applying ownership and permissions before exit" | ts '%Y-%m-%d %H:%M:%.S'
 		chmod -R 755 /config/qBittorrent
-		chown -R $PUID:$PGID /config/qBittorrent
+		chown -R ${PUID}:${PGID} /config/qBittorrent
 	fi
 }
 
@@ -20,7 +20,7 @@ fi
 if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 	/bin/cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
 	chmod 755 /config/qBittorrent/config/qBittorrent.conf
-	chown -R $PUID:$PGID /config/qBittorrent/config/qBittorrent.conf
+	chown -R ${PUID}:${PGID} /config/qBittorrent/config/qBittorrent.conf
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
@@ -29,7 +29,7 @@ echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 while true; do
 	if [ -e /config/qBittorrent ]; then
 		chmod -R 755 /config/qBittorrent
-		chown -R $PUID:$PGID /config/qBittorrent
+		chown -R ${PUID}:${PGID} /config/qBittorrent
 		break
 	else
 		sleep 1
