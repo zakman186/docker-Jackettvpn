@@ -141,6 +141,7 @@ fi
 if [[ $VPN_ENABLED == "yes" ]]; then
 	echo "[info] Starting OpenVPN..." | ts '%Y-%m-%d %H:%M:%.S'
 	#cd /config/openvpn
+	exec openvpn --config ${VPN_CONFIG} --daemon
 	exec /bin/bash /etc/openvpn/openvpn.init start &
 	exec /bin/bash /etc/qbittorrent/iptables.sh
 else
