@@ -29,8 +29,8 @@ This is where qBittorrent will store your downloads, incomplete downloads and/or
 |`VPN_ENABLED`|Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
 |`LAN_NETWORK`|Local Network with CIDR notation |`OPENVPN_PASSWORD=192.168.1.0/24`|
 |`NAME_SERVERS`|Comma delimited name servers |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
-|`PUID`|UID applied to config files |`PUID=99`|
-|`PGID`|GID applied to config files |`PGID=100`|
+|`PUID`|UID applied to config files and downloads |`PUID=99`|
+|`PGID`|GID applied to config files and downloads |`PGID=100`|
 
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
