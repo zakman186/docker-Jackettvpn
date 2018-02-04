@@ -10,6 +10,8 @@ VOLUME /config
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN usermod -u 99 nobody
+
 # Update packages and install software
 RUN apt-get update \
     && apt-get -y install software-properties-common \
