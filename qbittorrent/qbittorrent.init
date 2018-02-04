@@ -13,8 +13,8 @@
 # Added log support and cleanup by DementedZA
 
 #Edit the user that qbittorrent-nox will run as.
-USER="nobody"
-GROUP="users"
+USER="99"
+GROUP="100"
 
 # No need to edit these. Logging is sent to /var/log/qbittorrent-nox.log by default.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
