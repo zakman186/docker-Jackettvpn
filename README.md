@@ -8,7 +8,7 @@ To run the container use this command:
 
 ```
 $ docker run --privileged  -d \
-              -v /your/docker/config/path/:/config \
+              -v /your/config/path/:/config \
               -v /your/downloads/path/:/downloads \
               -e "VPN_ENABLED=yes" \
               -e "LAN_NETWORK=192.168.1.0/24" \
@@ -35,8 +35,14 @@ This is where qBittorrent will store your downloads, incomplete downloads and/or
 ### Volumes
 | Volume | Required| Function | Example |
 |----------|----------|----------|----------|
-| `config` | Yes | qBittorrent and OpenVPN config files | `VPN_ENABLED=yes`|
-| `downloads` | No | Default download path for torrents | `VPN_ENABLED=yes`|
+| `config` | Yes | qBittorrent and OpenVPN config files | `/your/config/path/:/config`|
+| `downloads` | No | Default download path for torrents | `/your/downloads/path/:/downloads`|
+
+### Ports
+| Port | Required| Function | Example |
+|----------|----------|----------|----------|
+| `8080` | Yes | qBittorrent WebUI | `8080:8080`|
+| `8999` | Yes | Default download path for torrents | `VPN_ENABLED=yes`|
 
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
@@ -48,7 +54,7 @@ Access http://IPADDRESS:8080 from a browser on the same network.
 |`WebUI Password`|adminadmin |
 
 ## How to use OpenVPN
-The container will fail to boot if `VPN_ENABLED` is set to anything other than no and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
+The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
 
 ### Example auth-user-pass option
 `auth-user-pass credentials.conf`
@@ -80,7 +86,7 @@ $ docker build -t qbittorrentvpn .
 ### Run it:
 ```
 $ docker run --privileged  -d \
-              -v /your/docker/config/path/:/config \
+              -v /your/config/path/:/config \
               -v /your/downloads/path/:/downloads \
               -e "LAN_NETWORK=192.168.1.0/24" \
               -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
