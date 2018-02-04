@@ -22,7 +22,7 @@ RUN apt-get update \
 ADD openvpn/ /etc/openvpn/
 ADD qbittorrent/ /etc/qbittorrent/
 
-RUN chmod +x /etc/qbittorrent/*.sh /etc/openvpn/*.sh
+RUN chmod +x /etc/qbittorrent/*.sh /etc/qbittorrent/*.init /etc/openvpn/*.sh
 
 # Expose ports and run
 EXPOSE 8080
