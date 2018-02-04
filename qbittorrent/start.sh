@@ -11,7 +11,7 @@ _handler() {
 	fi
 }
 
-trap _handler SIGINT SIGTERM SIGHUP 
+#trap _handler SIGINT SIGTERM SIGHUP 
 
 if [[ ! -e /config/qBittorrent ]]; then
 	mkdir -p /config/qBittorrent/config/
@@ -24,7 +24,7 @@ if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/etc/qbittorrent/qbittorrent.init &
+/etc/qbittorrent/qbittorrent.init start
 
 while true; do
 	if [ -e /config/qBittorrent ]; then
@@ -36,5 +36,5 @@ while true; do
 	fi
 done
 
-child=$(pgrep -o -x qbittorrent-nox) 
-wait "$child"
+#child=$(pgrep -o -x qbittorrent-nox) 
+#wait "$child"
