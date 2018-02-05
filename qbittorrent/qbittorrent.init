@@ -32,7 +32,7 @@ DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOGPATH$QBTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
 
-umask 022
+umask 002
 
 # Read configuration variable file if it is present
 #[ -r /etc/default/$NAME ] && . /etc/default/$NAME
