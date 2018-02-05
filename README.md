@@ -37,10 +37,11 @@ $ docker run --privileged  -d \
 | `downloads` | No | Default download path for torrents | `/your/downloads/path/:/downloads`|
 
 ### Ports
-| Port | Required| Function | Example |
+| Port | Proto | Required| Function | Example |
 |----------|----------|----------|----------|
-| `8080` | Yes | qBittorrent WebUI | `8080:8080`|
-| `8999` | Yes | Default download path for torrents | `VPN_ENABLED=yes`|
+| `8080` | TCP | Yes | qBittorrent WebUI | `8080:8080`|
+| `8999` | TCP | Yes | Default download path for torrents | `8999:8999`|
+| `8999` | UDP | Yes | Default download path for torrents | `8999:8999/udp`|
 
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
