@@ -27,7 +27,7 @@ QBTLOG="qbittorrent-daemon.log"
 
 DAEMON="/usr/bin/qbittorrent-nox"
 DAEMON_ARGS="--profile=/config"
-DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOG 2>&1"
+DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOGPATH$QBTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
 
@@ -59,10 +59,10 @@ do_start()
         	echo "Logging to $QBTLOGPATH$QBTLOG."
 	else
         	echo "Log file $QBTLOGPATH$QBTLOG doesn't exist. Creating it..."
-	        touch $QBTLOG
-	        chown $USER:$GROUP $QBTLOGPATH$QBTLOG
-        	if [ -f $QBTLOG ];
+	        touch $QBTLOGPATH$QBTLOG
+        	if [ -f $QBTLOGPATH$QBTLOG ];
                 	then
+				chown $USER:$GROUP $QBTLOGPATH$QBTLOG
                         	echo "Logfile created. Logging to $QBTLOGPATH$QBTLOG"
 	                else
         	                echo "Couldn't create logfile $QBTLOGPATH$QBTLOG. Please investigate."
