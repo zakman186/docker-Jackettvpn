@@ -30,9 +30,6 @@ DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
 
-# Exit if the package is not installed
-[ -x "$DAEMON" ] || exit 0
-
 # Read configuration variable file if it is present
 #[ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
