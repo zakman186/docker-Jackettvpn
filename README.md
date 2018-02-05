@@ -1,6 +1,9 @@
+[preview]: https://raw.githubusercontent.com/MarkusMcNugen/docker-templates/master/qbittorrentvpn/Screenshot.png "qBittorrent Preview"
 
 # qBittorrent with WebUI and OpenVPN
 Docker container which runs a headless qBittorrent client with WebUI while connecting to OpenVPN with iptables killswitch to prevent IP leakage when the tunnel goes down.
+
+![alt text][preview]
 
 ## Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
