@@ -1,6 +1,6 @@
 
 # qBittorrent with WebUI and OpenVPN
-Docker container which runs a headless qBittorrent client with WebUI while connecting to OpenVPN.
+Docker container which runs a headless qBittorrent client with WebUI while connecting to OpenVPN with iptables killswitch to prevent IP leakage when the tunnel goes down.
 
 ## Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
@@ -54,6 +54,8 @@ Access http://IPADDRESS:8080 from a browser on the same network.
 
 ## How to use OpenVPN
 The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container again. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
+
+**Note:** The script will use the first ovpn file it finds in the /config/openvpn directory. Adding multiple ovpn files will not start multiple VPN connections.
 
 ### Example auth-user-pass option
 `auth-user-pass credentials.conf`
