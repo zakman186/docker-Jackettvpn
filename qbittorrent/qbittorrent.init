@@ -15,8 +15,6 @@
 #Edit the user that qbittorrent-nox will run as.
 USER=${PUID}
 GROUP=${PGID}
-echo "$(getent passwd)"
-echo "$(getent passwd)"
 
 # No need to edit these. Logging is sent to /var/log/qbittorrent-nox.log by default.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
