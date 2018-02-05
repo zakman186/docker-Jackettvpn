@@ -32,7 +32,7 @@ DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOGPATH$QBTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
 
-umask 000
+umask 022
 
 # Read configuration variable file if it is present
 #[ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -77,9 +77,9 @@ do_start()
         #   1 if daemon was already running
         #   2 if daemon could not be started
 
-	start-stop-daemon --start --chuid $USER:$GROUP --umask $UMASK --test --quiet --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 1
+	start-stop-daemon --start --chuid $USER:$GROUP --test --quiet --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 1
 
-	start-stop-daemon --start --chuid $USER:$GROUP --umask $UMASK --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 2
+	start-stop-daemon --start --chuid $USER:$GROUP --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 2
 	sleep 1
 	echo "[info] Started qBittorrent daemon successfully..." | ts '%Y-%m-%d %H:%M:%.S'
 }
