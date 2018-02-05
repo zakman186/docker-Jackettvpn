@@ -20,9 +20,6 @@ $ docker run --privileged  -d \
               markusmcnugen/qbittorrentvpn
 ```
 
-As you can see, the container also expects a downloads volume to be mounted.
-This is where qBittorrent will store your downloads, incomplete downloads and/or a watch directory for new .torrent files.
-
 ### Environment Variables
 | Variable | Required| Function | Example |
 |----------|----------|----------|----------|
