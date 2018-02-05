@@ -26,5 +26,5 @@ echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 /etc/qbittorrent/qbittorrent.init start &
 
 child=$(pgrep -o -x qbittorrent-nox) 
-echo "$child"
+echo "[info] qbittorrent-nox PID: $child" | ts '%Y-%m-%d %H:%M:%.S'
 wait "$child"
