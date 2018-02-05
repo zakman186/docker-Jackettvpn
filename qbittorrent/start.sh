@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-handler() {
-	echo "[warn] Shutdown detected..." | ts '%Y-%m-%d %H:%M:%.S'
-}
-
 if [[ ! -e /config/qBittorrent ]]; then
 	mkdir -p /config/qBittorrent/config/
 	chown -R ${PUID}:${PGID} /config/qBittorrent
@@ -19,7 +15,7 @@ if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/bin/bash /etc/qbittorrent/qbittorrent.init start &
+/bin/bash /etc/qbittorrent/qbittorrent.init start
 chmod -R 755 /config/qBittorrent
 
 sleep 1
