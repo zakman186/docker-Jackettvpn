@@ -63,7 +63,6 @@ do_start()
         	if [ -f $QBTLOGPATH$QBTLOG ];
                 	then
 				chown $USER:$GROUP $QBTLOGPATH$QBTLOG
-				chmod 775 $QBTLOGPATH$QBTLOG
                         	echo "Logfile created. Logging to $QBTLOGPATH$QBTLOG"
 	                else
         	                echo "Couldn't create logfile $QBTLOGPATH$QBTLOG. Please investigate."
