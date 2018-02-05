@@ -22,6 +22,7 @@ echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 /bin/bash /etc/qbittorrent/qbittorrent.init start &
 chmod -R 755 /config/qBittorrent
 
+sleep 1
 child=$(pgrep -o -x qbittorrent-nox) 
 echo "[info] qBittorrent PID: $child" | ts '%Y-%m-%d %H:%M:%.S'
 
