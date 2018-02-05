@@ -28,8 +28,10 @@ chmod -R 755 /config/qBittorrent
 child=$(pgrep -o -x qbittorrent-nox) 
 echo "[info] qbittorrent-nox PID: $child" | ts '%Y-%m-%d %H:%M:%.S'
 
-while [ -e /proc/$child ]; do 
-	sleep 0.1
-else
-	_handler
+while true; do 
+	if [ -e /proc/$child ]; then
+		sleep 0.1
+	else
+		_handler
+	fi
 done
