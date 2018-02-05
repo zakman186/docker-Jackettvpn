@@ -22,7 +22,7 @@ echo "$(getent passwd)"
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 SCRIPTNAME="/etc/init.d/qbittorrent"
 NAME="qbittorrent-nox"
-DESC="QBittorrent"
+DESC="qBittorrent"
 PIDFILE="/var/run/$NAME.pid"
 QBTLOG="/config/qBittorrent/data/logs/qbittorrent-daemon.log"
 
