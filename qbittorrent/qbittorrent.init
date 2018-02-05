@@ -24,7 +24,7 @@ SCRIPTNAME="/etc/init.d/qbittorrent"
 NAME="qbittorrent-nox"
 DESC="QBittorrent"
 PIDFILE="/var/run/$NAME.pid"
-QBTLOG="/config/qBittorrent/data/logs/$NAME daemon.log"
+QBTLOG="/config/qBittorrent/data/logs/qbittorrent-daemon.log"
 
 DAEMON="/usr/bin/qbittorrent-nox"
 DAEMON_ARGS="--profile=/config"
