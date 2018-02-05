@@ -17,6 +17,7 @@ $ docker run --privileged  -d \
               -e "PGID=100" \
               -p 8080:8080 \
               -p 8999:8999 \
+              -p 8999:8999/udp \
               markusmcnugen/qbittorrentvpn
 ```
 
@@ -92,6 +93,7 @@ $ docker run --privileged  -d \
               -e "PGID=100" \
               -p 8080:8080 \
               -p 8999:8999 \
+              -p 8999:8999/udp \
               qbittorrentvpn
 ```
 
