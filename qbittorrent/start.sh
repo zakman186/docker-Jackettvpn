@@ -11,7 +11,6 @@ fi
 if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 	/bin/cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
 	chmod 755 /config/qBittorrent/config/qBittorrent.conf
-	chown -R ${PUID}:${PGID} /config/qBittorrent/config/qBittorrent.conf
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
