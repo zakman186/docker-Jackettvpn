@@ -22,7 +22,7 @@ SCRIPTNAME="/etc/init.d/qbittorrent"
 NAME="qbittorrent-nox"
 DESC="QBittorrent"
 PIDFILE="/var/run/$NAME.pid"
-QBTLOG="/var/log/$NAME.log"
+QBTLOG="/config/qBittorrent/data/logs/$NAME daemon.log"
 
 DAEMON="/usr/bin/qbittorrent-nox"
 DAEMON_ARGS="--profile=/config"
@@ -31,7 +31,7 @@ DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOG 2>&1"
 export DBUS_SESSION_BUS_ADDRESS=""
 
 # Exit if the package is not installed
-[ -x "$DAEMONPATH$DAEMON" ] || exit 0
+[ -x "$DAEMON" ] || exit 0
 
 # Read configuration variable file if it is present
 #[ -r /etc/default/$NAME ] && . /etc/default/$NAME
