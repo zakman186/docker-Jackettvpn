@@ -23,10 +23,11 @@ if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/bin/bash /etc/qbittorrent/qbittorrent.init start &
+/bin/bash /etc/qbittorrent/qbittorrent.init start
 
 child=$(pgrep -o -x qbittorrent-nox) 
 echo "[info] qbittorrent-nox PID: $child" | ts '%Y-%m-%d %H:%M:%.S'
+
 while [ -e /proc/$child ]; do 
 	sleep 0.1; 
 else
