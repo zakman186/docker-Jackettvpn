@@ -7,8 +7,6 @@ _handler() {
 	chmod -R 755 /config/qBittorrent
 }
 
-trap _handler SIGINT SIGTERM SIGHUP 
-
 if [[ ! -e /config/qBittorrent ]]; then
 	mkdir -p /config/qBittorrent/config/
 	chown -R ${PUID}:${PGID} /config/qBittorrent
@@ -23,7 +21,8 @@ if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
 fi
 
 echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/bin/bash /etc/qbittorrent/qbittorrent.init start
+/bin/bash /etc/qbittorrent/qbittorrent.init start &
+echo "[info] Started qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 
 child=$(pgrep -o -x qbittorrent-nox) 
 echo "[info] qbittorrent-nox PID: $child" | ts '%Y-%m-%d %H:%M:%.S'
