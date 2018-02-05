@@ -3,12 +3,14 @@ openvpn:
   privileged: true
   ports:
     - "8080:8080"
+    - "8999:8999"
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - /your/config/path/:/config
     - /your/downloads/path/:/downloads
   environment:
-    OPENVPN_USERNAME: username
-    OPENVPN_PASSWORD: password
+    VPN_ENABLED: yes
+    LAN_NETWORK: 192.168.1.0/24
+    NAME_SERVERS: 8.8.8.8,8.8.4.4
     PUID: UID
     PGID: GID
