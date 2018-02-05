@@ -54,13 +54,13 @@ Access http://IPADDRESS:8080 from a browser on the same network.
 |`WebUI Password`|adminadmin |
 
 ## How to use OpenVPN
-The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
+The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container again. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
 
 ### Example auth-user-pass option
 `auth-user-pass credentials.conf`
 
 ### Example credentials.conf
-username
+username<br>
 password
 
 ## PUID/PGID
