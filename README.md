@@ -22,7 +22,7 @@ $ docker run --privileged  -d \
 ```
 
 ### Environment Variables
-| Variable | Required| Function | Example |
+| Variable | Required | Function | Example |
 |----------|----------|----------|----------|
 |`VPN_ENABLED`| Yes | Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
 |`LAN_NETWORK`| Yes | Local Network with CIDR notation |`LAN_NETWORK=192.168.1.0/24`|
@@ -31,14 +31,14 @@ $ docker run --privileged  -d \
 |`PGID`| No | GID applied to config files and downloads |`PGID=100`|
 
 ### Volumes
-| Volume | Required| Function | Example |
+| Volume | Required | Function | Example |
 |----------|----------|----------|----------|
 | `config` | Yes | qBittorrent and OpenVPN config files | `/your/config/path/:/config`|
 | `downloads` | No | Default download path for torrents | `/your/downloads/path/:/downloads`|
 
 ### Ports
-| Port | Proto | Required| Function | Example |
-|----------|----------|----------|----------|
+| Port | Proto | Required | Function | Example |
+|----------|----------|----------|----------|----------|
 | `8080` | TCP | Yes | qBittorrent WebUI | `8080:8080`|
 | `8999` | TCP | Yes | Default download path for torrents | `8999:8999`|
 | `8999` | UDP | Yes | Default download path for torrents | `8999:8999/udp`|
