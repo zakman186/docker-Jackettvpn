@@ -22,6 +22,9 @@ qbpid=$(pgrep -o -x qbittorrent-nox)
 echo "[info] qBittorrent PID: $qbpid" | ts '%Y-%m-%d %H:%M:%.S'
 
 if [ -e /proc/$qbpid ]; then
+	if [[ -e /config/qBittorrent/data/logs/qbittorrent.log ]]; then
+		chmod 775 /config/qBittorrent/data/logs/qbittorrent.log
+	fi
 	sleep infinity
 else
 	echo "qBittorrent failed to start!"
