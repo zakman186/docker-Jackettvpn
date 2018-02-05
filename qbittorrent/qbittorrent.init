@@ -10,13 +10,14 @@
 ### END INIT INFO
 
 # Author: Jesper Smith
-# Added log support and cleanup by DementedZA
+# Edited by MarkusMcNugen
+# Edited log paths for docker, added umask and group to chuid option
 
 #Edit the user that qbittorrent-nox will run as.
 USER=${PUID}
 GROUP=${PGID}
 
-# No need to edit these. Logging is sent to /var/log/qbittorrent-nox.log by default.
+# No need to edit these. Logging is sent to /config/qBittorrent/data/logs/qbittorrent-daemon.log by default.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 SCRIPTNAME="/etc/init.d/qbittorrent"
 NAME="qbittorrent-nox"
@@ -24,6 +25,7 @@ DESC="qBittorrent"
 PIDFILE="/var/run/$NAME.pid"
 QBTLOGPATH="/config/qBittorrent/data/logs/"
 QBTLOG="qbittorrent-daemon.log"
+UMASK="022"
 
 DAEMON="/usr/bin/qbittorrent-nox"
 DAEMON_ARGS="--profile=/config"
@@ -74,9 +76,9 @@ do_start()
         #   1 if daemon was already running
         #   2 if daemon could not be started
 
-	start-stop-daemon --start --chuid $USER:$GROUP --test --quiet --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 1
+	start-stop-daemon --start --chuid $USER:$GROUP --umask $UMASK --test --quiet --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 1
 
-	start-stop-daemon --start --chuid $USER:$GROUP --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 2
+	start-stop-daemon --start --chuid $USER:$GROUP --umask $UMASK --make-pidfile --pidfile $PIDFILE --background --exec /bin/bash -- -c "$DAEMONSTRING" || return 2
 	sleep 1
 	echo "[info] Started qBittorrent daemon successfully..." | ts '%Y-%m-%d %H:%M:%.S'
 }
