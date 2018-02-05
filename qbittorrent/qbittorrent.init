@@ -22,7 +22,8 @@ SCRIPTNAME="/etc/init.d/qbittorrent"
 NAME="qbittorrent-nox"
 DESC="qBittorrent"
 PIDFILE="/var/run/$NAME.pid"
-QBTLOG="/config/qBittorrent/data/logs/qbittorrent-daemon.log"
+QBTLOGPATH="/config/qBittorrent/data/logs/"
+QBTLOG="qbittorrent-daemon.log"
 
 DAEMON="/usr/bin/qbittorrent-nox"
 DAEMON_ARGS="--profile=/config"
@@ -46,19 +47,25 @@ export DBUS_SESSION_BUS_ADDRESS=""
 do_start()
 {
 
+	#Check if log path exists. If it doesn't exist, create it.
+	if [ ! -e $QBTLOGPATH ]; then
+		mkdir -p $QBTLOGPATH
+		chown -R ${PUID}:${PGID} /config/qBittorrent
+	fi
+	
 	#Check for log file. If it doesn't exist, create it.
-	if [ -f $QBTLOG ];
+	if [ -f $QBTLOGPATH$QBTLOG ];
 	then
-        	echo "Logging to $QBTLOG."
+        	echo "Logging to $QBTLOGPATH$QBTLOG."
 	else
-        	echo "Log file $QBTLOG doesn't exist. Creating it..."
+        	echo "Log file $QBTLOGPATH$QBTLOG doesn't exist. Creating it..."
 	        touch $QBTLOG
-	        chown $USER:$GROUP $QBTLOG
+	        chown $USER:$GROUP $QBTLOGPATH$QBTLOG
         	if [ -f $QBTLOG ];
                 	then
-                        	echo "Logfile created. Logging to $QBTLOG"
+                        	echo "Logfile created. Logging to $QBTLOGPATH$QBTLOG"
 	                else
-        	                echo "Couldn't create logfile $QBTLOG. Please investigate."
+        	                echo "Couldn't create logfile $QBTLOGPATH$QBTLOG. Please investigate."
 	        fi
 	fi
 
