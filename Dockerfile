@@ -1,8 +1,8 @@
 # qBittorrent and OpenVPN
 #
-# Version 1.0
+# Version 1.8
 
-FROM ubuntu:16.04
+FROM ubuntu:17.04
 MAINTAINER MarkusMcNugen
 
 VOLUME /downloads
