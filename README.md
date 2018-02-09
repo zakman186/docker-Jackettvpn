@@ -43,8 +43,8 @@ $ docker run --privileged  -d \
 | Port | Proto | Required | Function | Example |
 |----------|----------|----------|----------|----------|
 | `8080` | TCP | Yes | qBittorrent WebUI | `8080:8080`|
-| `8999` | TCP | Yes | Default download path for torrents | `8999:8999`|
-| `8999` | UDP | Yes | Default download path for torrents | `8999:8999/udp`|
+| `8999` | TCP | Yes | qBittorrent listening port | `8999:8999`|
+| `8999` | UDP | Yes | qBittorrent listening port | `8999:8999/udp`|
 
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
