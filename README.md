@@ -58,6 +58,8 @@ $ docker run --privileged  -d \
 ## Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
 
+**Note:** qBittorrent throws a header mismatch error if trying to open the WebUI in unRAID with the WebUI link. Type https://IPADDRESS:PORT into a browser on the same network and it will work.
+
 ### Default Credentials
 | Credential | Default Value |
 |----------|----------|
