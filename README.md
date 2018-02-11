@@ -5,7 +5,7 @@ Docker container which runs a headless qBittorrent v4.3 client with WebUI while 
 
 ![alt text][preview]
 
-# Docker Features
+## Docker Features
 * Base: Ubuntu 18.04
 * qBittorrent v4.3
 * Size: 287MB
