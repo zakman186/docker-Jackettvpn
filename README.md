@@ -5,6 +5,15 @@ Docker container which runs a headless qBittorrent v4.3 client with WebUI while 
 
 ![alt text][preview]
 
+# Docker Features
+* Base: Ubuntu 18.04
+* qBittorrent v4.3
+* Size: 287MB
+* Selectively enable or disable OpenVPN support
+* IP tables kill switch to prevent IP leaking when VPN connection fails
+* Specify name servers to add to container
+* Configure UID and GID for config files and downloads by qBittorrent
+
 ## Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
 To run the container use this command:
@@ -24,7 +33,7 @@ $ docker run --privileged  -d \
               markusmcnugen/qbittorrentvpn
 ```
 
-### Environment Variables
+## Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
 |`VPN_ENABLED`| Yes | Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
@@ -33,13 +42,13 @@ $ docker run --privileged  -d \
 |`PUID`| No | UID applied to config files and downloads |`PUID=99`|
 |`PGID`| No | GID applied to config files and downloads |`PGID=100`|
 
-### Volumes
+## Volumes
 | Volume | Required | Function | Example |
 |----------|----------|----------|----------|
 | `config` | Yes | qBittorrent and OpenVPN config files | `/your/config/path/:/config`|
 | `downloads` | No | Default download path for torrents | `/your/downloads/path/:/downloads`|
 
-### Ports
+## Ports
 | Port | Proto | Required | Function | Example |
 |----------|----------|----------|----------|----------|
 | `8080` | TCP | Yes | qBittorrent WebUI | `8080:8080`|
