@@ -37,7 +37,7 @@ $ docker run --privileged  -d \
 ## Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
-|`VPN_ENABLED`| Yes | Enable VPN? (yes\|no) Default:yes|`VPN_ENABLED=yes`|
+|`VPN_ENABLED`| Yes | Enable VPN? (yes/no) Default:yes|`VPN_ENABLED=yes`|
 |`LAN_NETWORK`| Yes | Local Network with CIDR notation |`LAN_NETWORK=192.168.1.0/24`|
 |`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
 |`PUID`| No | UID applied to config files and downloads |`PUID=99`|
