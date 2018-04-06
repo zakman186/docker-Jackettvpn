@@ -145,13 +145,13 @@ iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 # if iptable mangle is available (kernel module) then use mark
 if [[ $iptable_mangle_exit_code == 0 ]]; then
 
-	# accept output from deluge webui port 8112 - used for external access
+	# accept output from qBittorrent webui port 8080 - used for external access
 	iptables -t mangle -A OUTPUT -p tcp --dport 8080 -j MARK --set-mark 1
 	iptables -t mangle -A OUTPUT -p tcp --sport 8080 -j MARK --set-mark 1
 
 fi
 
-# accept output from deluge webui port 8112 - used for lan access
+# accept output from qBittorrent webui port 8080 - used for lan access
 iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 
@@ -161,7 +161,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	# strip whitespace from start and end of lan_network_item
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-	# accept output to deluge daemon port - used for lan access
+	# accept output to qBittorrent daemon port - used for lan access
 	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 8999 -j ACCEPT
 
 done
