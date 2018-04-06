@@ -70,13 +70,13 @@ if [[ "${DEBUG}" == "true" ]]; then
 fi
 
 # identify ip for docker bridge interface
-docker_ip=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=inet\saddr:)[^\s]+')
+docker_ip=$(ifconfig "${docker_interface}" | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 if [[ "${DEBUG}" == "true" ]]; then
  	echo "[debug] Docker IP defined as ${docker_ip}"
 fi
 
 # identify netmask for docker bridge interface
-docker_mask=$(ifconfig "${docker_interface}" | grep -P -o -m 1 '(?<=Mask:)[^\s]+')
+docker_mask=$(ifconfig "${docker_interface}" | grep -o "netmask [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 if [[ "${DEBUG}" == "true" ]]; then
 	echo "[debug] Docker netmask defined as ${docker_mask}"
 fi
