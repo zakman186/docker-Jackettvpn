@@ -8,7 +8,7 @@ Docker container which runs a headless qBittorrent v4.3 client with WebUI while 
 ## Docker Features
 * Base: Ubuntu 18.04
 * qBittorrent v4.3
-* Size: 287MB
+* Size: 403MB
 * Selectively enable or disable OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
 * Specify name servers to add to container
@@ -76,8 +76,10 @@ The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .o
 `auth-user-pass credentials.conf`
 
 ## Example credentials.conf
-username<br>
+```
+username
 password
+```
 
 ## PUID/PGID
 User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:
