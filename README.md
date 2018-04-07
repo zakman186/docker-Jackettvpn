@@ -33,7 +33,7 @@ $ docker run --privileged  -d \
               markusmcnugen/qbittorrentvpn
 ```
 
-# Variables
+# Variables, Volumes, and Ports
 ## Environment Variables
 | Variable | Required | Function | Example |
 |----------|----------|----------|----------|
