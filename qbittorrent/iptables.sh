@@ -103,9 +103,9 @@ iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACC
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
-# accept input to deluge webui port 8080
-iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
+# accept input to qbittorrent webui port
+iptables -A INPUT -i eth0 -p tcp --dport ${webui_port_env} -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --sport ${webui_port_env} -j ACCEPT
 
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
@@ -114,7 +114,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept input to deluge daemon port - used for lan access
-	iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport 8999 -j ACCEPT
+	iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport ${incoming_port_env} -j ACCEPT
 
 done
 
@@ -145,15 +145,15 @@ iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 # if iptable mangle is available (kernel module) then use mark
 if [[ $iptable_mangle_exit_code == 0 ]]; then
 
-	# accept output from qBittorrent webui port 8080 - used for external access
-	iptables -t mangle -A OUTPUT -p tcp --dport 8080 -j MARK --set-mark 1
-	iptables -t mangle -A OUTPUT -p tcp --sport 8080 -j MARK --set-mark 1
+	# accept output from qBittorrent webui port - used for external access
+	iptables -t mangle -A OUTPUT -p tcp --dport ${webui_port_env} -j MARK --set-mark 1
+	iptables -t mangle -A OUTPUT -p tcp --sport ${webui_port_env} -j MARK --set-mark 1
 
 fi
 
-# accept output from qBittorrent webui port 8080 - used for lan access
-iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
+# accept output from qBittorrent webui port - used for lan access
+iptables -A OUTPUT -o eth0 -p tcp --dport ${webui_port_env} -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport ${webui_port_env} -j ACCEPT
 
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
@@ -162,7 +162,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept output to qBittorrent daemon port - used for lan access
-	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 8999 -j ACCEPT
+	iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport ${incoming_port_env} -j ACCEPT
 
 done
 
