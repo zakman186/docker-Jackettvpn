@@ -14,7 +14,7 @@ RUN usermod -u 99 nobody
 
 # Update packages and install software
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends apt-utils \
+    && apt-get install -y --no-install-recommends apt-utils openssl \
     && apt-get install -y software-properties-common \
     && add-apt-repository ppa:qbittorrent-team/qbittorrent-stable \
     && apt-get update \
