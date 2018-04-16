@@ -7,7 +7,7 @@ Docker container which runs the latest headless qBittorrent client with WebUI wh
 
 ## Docker Features
 * Base: Ubuntu 18.04
-* qBittorrent v4.3
+* Latest qBittorrent
 * Size: 403MB
 * Selectively enable or disable OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
