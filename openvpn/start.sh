@@ -43,24 +43,21 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	echo "[info] OpenVPN config file (ovpn extension) is located at ${VPN_CONFIG}" | ts '%Y-%m-%d %H:%M:%.S'
 	
 	# Read username and password env vars and put them in credentials.conf, then add ovpn config for credentials file
-	if [[ ! -z "${vpn_username}" ]] && [[ ! -z "${vpn_password}" ]]; then
+	if [[ ! -z "${VPN_USERNAME}" ]] && [[ ! -z "${VPN_PASSWORD}" ]]; then
 		if [[ ! -e /config/openvpn/credentials.conf ]]; then
 			touch /config/openvpn/credentials.conf
 		fi
 
-		echo "${vpn_username}" > /config/openvpn/credentials.conf
-		echo "${vpn_password}" >> /config/openvpn/credentials.conf
+		echo "${VPN_USERNAME}" > /config/openvpn/credentials.conf
+		echo "${VPN_PASSWORD}" >> /config/openvpn/credentials.conf
 	
-		# Check if auth-user-pass points to credentials file and try to modify with sed if it doesnt
-		auth_cred_exist=${cat ${VPN_CONFIG} | grep -m 1 'auth-user-pass credentials.conf' }
-		if [[ -z "${auth_cred_exist}" ]]; then
-			sed -i 's/^auth-user-pass/auth-user-pass credentials.conf/' ${VPN_CONFIG}
-		fi
+		# Get line number of auth-user-pass
+		LINE_NUM=$(grep -Fn -m 1 'auth-user-pass' ${VPN_CONFIG} | cut -d: -f 1)
 
-		# If auth-user-pass doesnt point to credentials.conf now then we need to add it to the ovpn file
-		auth_cred_exist=${cat ${VPN_CONFIG} | grep -m 1 'auth-user-pass credentials.conf' }
+		# Replace line with one that points to credentials.conf
+		auth_cred_exist=$(cat ${VPN_CONFIG} | grep -m 1 'auth-user-pass credentials.conf')
 		if [[ -z "${auth_cred_exist}" ]]; then
-			sed -i '1s/^/auth-user-pass credentials.conf\n/' ${VPN_CONFIG}
+			sed -i "${LINE_NUM}s/^/auth-user-pass credentials.conf\n/" ${VPN_CONFIG}
 		fi
 	fi
 	
