@@ -104,8 +104,13 @@ iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACC
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
 # accept input to qbittorrent webui port
-iptables -A INPUT -i eth0 -p tcp --dport ${webui_port_env} -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --sport ${webui_port_env} -j ACCEPT
+if [ -z "${WEBUI_PORT}" ]; then
+	iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
+	iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
+else
+	iptables -A INPUT -i eth0 -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+	iptables -A INPUT -i eth0 -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+fi
 
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
@@ -114,7 +119,11 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept input to deluge daemon port - used for lan access
-	iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport ${incoming_port_env} -j ACCEPT
+	if [ -z "${INCOMING_PORT}" ]; then
+		iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport 8999 -j ACCEPT
+	else
+		iptables -A INPUT -i eth0 -s "${lan_network_item}" -p tcp --dport ${INCOMING_PORT} -j ACCEPT
+	fi
 
 done
 
@@ -161,7 +170,7 @@ if [ -z "${WEBUI_PORT}" ]; then
 	iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
 	iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 else
-	echo "WebUI port defined as ${WEBUI_PORT}"
+	echo "[info] WebUI port defined as ${WEBUI_PORT}" | ts '%Y-%m-%d %H:%M:%.S'
 	iptables -A OUTPUT -o eth0 -p tcp --dport ${WEBUI_PORT} -j ACCEPT
 	iptables -A OUTPUT -o eth0 -p tcp --sport ${WEBUI_PORT} -j ACCEPT
 fi
@@ -176,7 +185,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 	if [ -z "${INCOMING_PORT}" ]; then
 		iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport 8999 -j ACCEPT
 	else
-		echo "Incoming connections port defined as ${INCOMING_PORT}"
+		echo "[info] Incoming connections port defined as ${INCOMING_PORT}" | ts '%Y-%m-%d %H:%M:%.S'
 		iptables -A OUTPUT -o eth0 -d "${lan_network_item}" -p tcp --sport ${INCOMING_PORT} -j ACCEPT
 	fi
 
