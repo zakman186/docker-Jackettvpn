@@ -31,6 +31,7 @@ ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
 IFS=',' read -ra lan_network_list <<< "${LAN_NETWORKS}"
 
 lancount=0
+lan_network_devices=()
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
@@ -41,13 +42,14 @@ for lan_network_item in "${lan_network_list[@]}"; do
 		int_mask=$(ifconfig "${interface}" | grep -o "netmask [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 		int_cidr=$(ipcalc "${int_ip}" "${int_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		if [[ $int_cidr == $lan_network_item ]]; then
-			$lan_network_devices[$lancount]=$interface
-			echo "${lan_network_devices[$lancount]}"
-				# get default gateway of interfaces as looping through them
-				DEFAULT_GATEWAY=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
+			lan_network_devices+=(${interface})
+			echo "$int_cidr detected on $interface interface"
+			
+			# get default gateway of interfaces as looping through them
+			DEFAULT_GATEWAY=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
 
-				# strip whitespace from start and end of lan_network_item
-				lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+			# strip whitespace from start and end of lan_network_item
+			lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		fi
 	done
 
