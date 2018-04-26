@@ -51,7 +51,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 			# strip whitespace from start and end of lan_network_item
 			lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 			
-			ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY2}" dev ${interface}
+			ip route add $lan_network_item via "${DEFAULT_GATEWAY2}" dev ${interface}
 		fi
 	done
 
