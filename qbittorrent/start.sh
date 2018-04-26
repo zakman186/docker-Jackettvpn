@@ -1,6 +1,4 @@
 #!/bin/bash
-set -e
-
 if [[ ! -e /config/qBittorrent ]]; then
 	mkdir -p /config/qBittorrent/config/
 	chown -R ${PUID}:${PGID} /config/qBittorrent
