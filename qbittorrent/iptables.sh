@@ -18,8 +18,8 @@ echo "[info] WebUI port defined as ${WEBUI_PORT}" | ts '%Y-%m-%d %H:%M:%.S'
 
 DEBUG=false
 
-echo "[info] Adding ${LAN_NETWORK} as route via docker eth0"
-	ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
+echo "[info] Adding ${LAN_NETWORK} as route via docker eth0" | ts '%Y-%m-%d %H:%M:%.S'
+ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
 
 # split comma seperated string into list from LAN_NETWORKS env variable
 IFS=',' read -ra lan_network_list <<< "${LAN_NETWORKS}"
@@ -40,7 +40,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 		int_ip=$(ifconfig "${interface}" | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 		int_mask=$(ifconfig "${interface}" | grep -o "netmask [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 		int_cidr=$(ipcalc "${int_ip}" "${int_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-		if [[ $int_cidr == $lan_network_item]]; then
+		if [[ $int_cidr == $lan_network_item ]]; then
 			$lan_network_devices[$lancount]=$interface
 		fi
 	done
@@ -71,7 +71,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 	# setup route for deluge webui using set-mark to route traffic for port 8080 to eth0
 	echo "8080    webui" >> /etc/iproute2/rt_tables
 	ip rule add fwmark 1 table webui
-	ip route add default via $DEFAULT_GATEWAY table webui
+	ip route add default via ${DEFAULT_GATEWAY} table webui
 
 fi
 
