@@ -56,9 +56,9 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		if [[ ! -z "${auth_cred_exist}" ]]; then
 			# Get line number of auth-user-pass
 			LINE_NUM=$(grep -Fn -m 1 'auth-user-pass' ${VPN_CONFIG} | cut -d: -f 1)
-			sed -i "${LINE_NUM}s/^/auth-user-pass credentials.conf\n/" ${VPN_CONFIG}
+			sed -i "${LINE_NUM}s/.*/auth-user-pass credentials.conf\n/" ${VPN_CONFIG}
 		else
-			sed -i "1s/^/auth-user-pass credentials.conf\n/" ${VPN_CONFIG}
+			sed -i "1s/.*/auth-user-pass credentials.conf\n/" ${VPN_CONFIG}
 		fi
 	fi
 	
