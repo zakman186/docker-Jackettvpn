@@ -42,6 +42,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 		int_cidr=$(ipcalc "${int_ip}" "${int_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		if [[ $int_cidr == $lan_network_item ]]; then
 			$lan_network_devices[$lancount]=$interface
+			echo "${lan_network_devices[$lancount]}"
 				# get default gateway of interfaces as looping through them
 				DEFAULT_GATEWAY=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
 
@@ -126,11 +127,11 @@ iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 # accept input to qbittorrent webui port
 for lan_network_device in "${lan_network_devices[@]}"; do
 	if [ -z "${WEBUI_PORT}" ]; then
-		iptables -A INPUT -i $lan_network_device -p tcp --dport 8080 -j ACCEPT
-		iptables -A INPUT -i $lan_network_device -p tcp --sport 8080 -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --dport 8080 -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --sport 8080 -j ACCEPT
 	else
-		iptables -A INPUT -i $lan_network_device -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-		iptables -A INPUT -i $lan_network_device -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
 	fi
 done
 
@@ -138,9 +139,9 @@ done
 lancount=0
 for lan_network_device in "${lan_network_devices[@]}"; do
 	if [ -z "${INCOMING_PORT}" ]; then
-		iptables -A INPUT -i $lan_network_device -s "${lan_network_list[$lancount]}" -p tcp --dport 8999 -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -s "${lan_network_list[$lancount]}" -p tcp --dport 8999 -j ACCEPT
 	else
-		iptables -A INPUT -i $lan_network_device -s "${lan_network_list[$lancount]}" -p tcp --dport ${INCOMING_PORT} -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -s "${lan_network_list[$lancount]}" -p tcp --dport ${INCOMING_PORT} -j ACCEPT
 	fi
 	lancount=$((lancount+1))
 done
@@ -196,11 +197,11 @@ fi
 # accept output from qBittorrent webui port - used for lan access
 for lan_network_device in "${lan_network_devices[@]}"; do
 	if [ -z "${WEBUI_PORT}" ]; then
-		iptables -A INPUT -i $lan_network_device -p tcp --dport 8080 -j ACCEPT
-		iptables -A INPUT -i $lan_network_device -p tcp --sport 8080 -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --dport 8080 -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --sport 8080 -j ACCEPT
 	else
-		iptables -A INPUT -i $lan_network_device -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-		iptables -A INPUT -i $lan_network_device -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+		iptables -A INPUT -i ${lan_network_device} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
 	fi
 done
 
@@ -216,9 +217,9 @@ fi
 lancount=0
 for lan_network_device in "${lan_network_devices[@]}"; do
 	if [ -z "${INCOMING_PORT}" ]; then
-		iptables -A OUTPUT -o $lan_network_device -d "${lan_network_list[$lancount]}" -p tcp --sport 8999 -j ACCEPT
+		iptables -A OUTPUT -o ${lan_network_device} -d "${lan_network_list[$lancount]}" -p tcp --sport 8999 -j ACCEPT
 	else
-		iptables -A OUTPUT -o $lan_network_device -d "${lan_network_list[$lancount]}" -p tcp --sport ${INCOMING_PORT} -j ACCEPT
+		iptables -A OUTPUT -o ${lan_network_device} -d "${lan_network_list[$lancount]}" -p tcp --sport ${INCOMING_PORT} -j ACCEPT
 	fi
 	lancount=$((lancount+1))
 done
