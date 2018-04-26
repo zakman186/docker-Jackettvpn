@@ -18,6 +18,12 @@ echo "[info] WebUI port defined as ${WEBUI_PORT}" | ts '%Y-%m-%d %H:%M:%.S'
 
 DEBUG=false
 
+# get default gateway of interfaces as looping through them
+DEFAULT_GATEWAY=$(ip -4 route list 0/0 | cut -d ' ' -f 3)
+
+# strip whitespace from start and end of lan_network_item
+export LAN_NETWORK=$(echo "${LAN_NETWORK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
 echo "[info] Adding ${LAN_NETWORK} as route via docker eth0" | ts '%Y-%m-%d %H:%M:%.S'
 ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
 
@@ -27,13 +33,7 @@ IFS=',' read -ra lan_network_list <<< "${LAN_NETWORKS}"
 lancount=0
 # process lan networks in the list
 for lan_network_item in "${lan_network_list[@]}"; do
-
-	# get default gateway of interfaces as looping through them
-	DEFAULT_GATEWAY=$(ip -4 route list 0/${lancount} | cut -d ' ' -f 3)
-	
-	# strip whitespace from start and end of lan_network_item
 	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-	
 	# Get network interface name for corresponding networks
 	for interface in $(ifconfig | cut -d ' ' -f1| tr ':' '\n' | awk NF)
 	do
@@ -42,6 +42,11 @@ for lan_network_item in "${lan_network_list[@]}"; do
 		int_cidr=$(ipcalc "${int_ip}" "${int_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		if [[ $int_cidr == $lan_network_item ]]; then
 			$lan_network_devices[$lancount]=$interface
+				# get default gateway of interfaces as looping through them
+				DEFAULT_GATEWAY=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
+
+				# strip whitespace from start and end of lan_network_item
+				lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		fi
 	done
 
