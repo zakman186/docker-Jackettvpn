@@ -46,10 +46,12 @@ for lan_network_item in "${lan_network_list[@]}"; do
 			echo "$int_cidr detected on $interface interface"
 			
 			# get default gateway of interfaces as looping through them
-			DEFAULT_GATEWAY=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
+			DEFAULT_GATEWAY2=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
 
 			# strip whitespace from start and end of lan_network_item
 			lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+			
+			ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY2}" dev ${interface}
 		fi
 	done
 
@@ -76,7 +78,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 
 	echo "[info] iptable_mangle support detected, adding fwmark for tables" | ts '%Y-%m-%d %H:%M:%.S'
 
-	# setup route for deluge webui using set-mark to route traffic for port 8080 to eth0
+	# setup route for qbittorrent webui using set-mark to route traffic for port 8080 to eth0
 	echo "8080    webui" >> /etc/iproute2/rt_tables
 	ip rule add fwmark 1 table webui
 	ip route add default via ${DEFAULT_GATEWAY} table webui
@@ -199,11 +201,11 @@ fi
 # accept output from qBittorrent webui port - used for lan access
 for lan_network_device in "${lan_network_devices[@]}"; do
 	if [ -z "${WEBUI_PORT}" ]; then
-		iptables -A INPUT -i ${lan_network_device} -p tcp --dport 8080 -j ACCEPT
-		iptables -A INPUT -i ${lan_network_device} -p tcp --sport 8080 -j ACCEPT
+		iptables -A OUTPUT -o ${lan_network_device} -p tcp --dport 8080 -j ACCEPT
+		iptables -A OUTPUT -o ${lan_network_device} -p tcp --sport 8080 -j ACCEPT
 	else
-		iptables -A INPUT -i ${lan_network_device} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-		iptables -A INPUT -i ${lan_network_device} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+		iptables -A OUTPUT -o ${lan_network_device} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+		iptables -A OUTPUT -o ${lan_network_device} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
 	fi
 done
 
