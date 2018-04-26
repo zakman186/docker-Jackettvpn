@@ -46,7 +46,7 @@ for lan_network_item in "${lan_network_list[@]}"; do
 			echo "$int_cidr detected on $interface interface"
 			
 			# get default gateway of interfaces as looping through them
-			DEFAULT_GATEWAY2=$(/sbin/ip route |grep '^default' | awk "/${$interface}/ {print $3}")
+			DEFAULT_GATEWAY2=$(/sbin/ip route |grep '^default' | awk "/${interface}/ {print $3}")
 
 			# strip whitespace from start and end of lan_network_item
 			lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
