@@ -27,36 +27,6 @@ export LAN_NETWORK=$(echo "${LAN_NETWORK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 echo "[info] Adding ${LAN_NETWORK} as route via docker eth0" | ts '%Y-%m-%d %H:%M:%.S'
 ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
 
-# split comma seperated string into list from LAN_NETWORKS env variable
-IFS=',' read -ra lan_network_list <<< "${LAN_NETWORKS}"
-
-lancount=0
-lan_network_devices=()
-# process lan networks in the list
-for lan_network_item in "${lan_network_list[@]}"; do
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-	# Get network interface name for corresponding networks
-	for interface in $(ifconfig | cut -d ' ' -f1| tr ':' '\n' | awk NF)
-	do
-		int_ip=$(ifconfig "${interface}" | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
-		int_mask=$(ifconfig "${interface}" | grep -o "netmask [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
-		int_cidr=$(ipcalc "${int_ip}" "${int_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-		if [[ $int_cidr == $lan_network_item ]]; then
-			lan_network_devices+=(${interface})
-			echo "$int_cidr detected on $interface interface"
-			
-			# get default gateway of interfaces as looping through them
-			DEFAULT_GATEWAYS=$(/sbin/ip route |grep '^default' | awk "/${interface}/ {print $3}")
-
-			echo "${DEFAULT_GATEWAYS} gateway detected for ${interface} interface"
-			
-			ip route add "${lan_network_item}" via "${DEFAULT_GATEWAYS}" dev "${interface}"
-		fi
-	done
-
-	lancount=$((lancount+1))
-done
-
 echo "[info] ip route defined as follows..." | ts '%Y-%m-%d %H:%M:%.S'
 echo "--------------------"
 ip route
@@ -119,35 +89,21 @@ ip6tables -P INPUT DROP 1>&- 2>&-
 iptables -A INPUT -i "${VPN_DEVICE_TYPE}" -j ACCEPT
 
 # accept input to/from LANs (172.x range is internal dhcp)
-for lan_network_item in "${lan_network_list[@]}"; do
-	iptables -A INPUT -s "${lan_network_item}" -d "${lan_network_item}" -j ACCEPT
-done
 iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
 # accept input to qbittorrent webui port
-for lan_network_device in "${lan_network_devices[@]}"; do
-	if [ -z "${WEBUI_PORT}" ]; then
-		iptables -A INPUT -i ${lan_network_device} -p tcp --dport 8080 -j ACCEPT
-		iptables -A INPUT -i ${lan_network_device} -p tcp --sport 8080 -j ACCEPT
-	else
-		iptables -A INPUT -i ${lan_network_device} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-		iptables -A INPUT -i ${lan_network_device} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
-	fi
-done
+if [ -z "${WEBUI_PORT}" ]; then
+	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --dport 8080 -j ACCEPT
+	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --sport 8080 -j ACCEPT
+else
+	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+fi
 
 # accept input to qbittorrent daemon port - used for lan access
-lancount=0
-for lan_network_device in "${lan_network_devices[@]}"; do
-	if [ -z "${INCOMING_PORT}" ]; then
-		iptables -A INPUT -i ${lan_network_device} -s "${lan_network_list[$lancount]}" -p tcp --dport 8999 -j ACCEPT
-	else
-		iptables -A INPUT -i ${lan_network_device} -s "${lan_network_list[$lancount]}" -p tcp --dport ${INCOMING_PORT} -j ACCEPT
-	fi
-	lancount=$((lancount+1))
-done
 if [ -z "${INCOMING_PORT}" ]; then
 	iptables -A INPUT -i eth0 -s "${LAN_NETWORK}" -p tcp --dport 8999 -j ACCEPT
 else
@@ -175,11 +131,8 @@ ip6tables -P OUTPUT DROP 1>&- 2>&-
 iptables -A OUTPUT -o "${VPN_DEVICE_TYPE}" -j ACCEPT
 
 # accept output to/from LANs
-for lan_network_item in "${lan_network_list[@]}"; do
-	iptables -A OUTPUT -s "${lan_network_item}" -d "${lan_network_item}" -j ACCEPT
-done
 iptables -A OUTPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
-	
+
 # accept output from vpn gateway
 iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 
@@ -198,16 +151,6 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 fi
 
 # accept output from qBittorrent webui port - used for lan access
-for lan_network_device in "${lan_network_devices[@]}"; do
-	if [ -z "${WEBUI_PORT}" ]; then
-		iptables -A OUTPUT -o ${lan_network_device} -p tcp --dport 8080 -j ACCEPT
-		iptables -A OUTPUT -o ${lan_network_device} -p tcp --sport 8080 -j ACCEPT
-	else
-		iptables -A OUTPUT -o ${lan_network_device} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-		iptables -A OUTPUT -o ${lan_network_device} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
-	fi
-done
-
 if [ -z "${WEBUI_PORT}" ]; then
 	iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
 	iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
@@ -217,16 +160,6 @@ else
 fi
 
 # accept output to qBittorrent daemon port - used for lan access
-lancount=0
-for lan_network_device in "${lan_network_devices[@]}"; do
-	if [ -z "${INCOMING_PORT}" ]; then
-		iptables -A OUTPUT -o ${lan_network_device} -d "${lan_network_list[$lancount]}" -p tcp --sport 8999 -j ACCEPT
-	else
-		iptables -A OUTPUT -o ${lan_network_device} -d "${lan_network_list[$lancount]}" -p tcp --sport ${INCOMING_PORT} -j ACCEPT
-	fi
-	lancount=$((lancount+1))
-done
-
 if [ -z "${INCOMING_PORT}" ]; then
 	iptables -A OUTPUT -o eth0 -d "${LAN_NETWORK}" -p tcp --sport 8999 -j ACCEPT
 else
