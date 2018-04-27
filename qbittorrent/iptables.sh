@@ -96,11 +96,11 @@ iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
 # accept input to qbittorrent webui port
 if [ -z "${WEBUI_PORT}" ]; then
-	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --dport 8080 -j ACCEPT
-	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --sport 8080 -j ACCEPT
+	iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
+	iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 else
-	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-	iptables -A INPUT -i ${LAN_NETWORK} -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+	iptables -A INPUT -i eth0 -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+	iptables -A INPUT -i eth0 -p tcp --sport ${WEBUI_PORT} -j ACCEPT
 fi
 
 # accept input to qbittorrent daemon port - used for lan access
