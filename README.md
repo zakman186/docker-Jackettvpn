@@ -59,7 +59,7 @@ $ docker run --privileged  -d \
 | `8999` | UDP | Yes | qBittorrent listening port | `8999:8999/udp`|
 
 # Access the WebUI
-Access http://IPADDRESS:8080 from a browser on the same network.
+Access http://IPADDRESS:PORT from a browser on the same network.
 
 ## Default Credentials
 | Credential | Default Value |
