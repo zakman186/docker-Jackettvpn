@@ -42,8 +42,8 @@ $ docker run --privileged  -d \
 |`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
 |`PUID`| No | UID applied to config files and downloads |`PUID=99`|
 |`PGID`| No | GID applied to config files and downloads |`PGID=100`|
-|`WEBUI_PORT_ENV`| No | Applies WebUI port for qBittorrents config file at boot |`WEBUI_PORT_ENV=8080`|
-|`INCOMING_PORT_ENV`| No | Applies Incoming port for qBittorrents config file at boot |`INCOMING_PORT_ENV=8999`|
+|`WEBUI_PORT_ENV`| No | Applies WebUI port for qBittorrents config file at boot (Must change exposed ports to match)  |`WEBUI_PORT_ENV=8080`|
+|`INCOMING_PORT_ENV`| No | Applies Incoming port for qBittorrents config file at boot (Must change exposed ports to match) |`INCOMING_PORT_ENV=8999`|
 
 ## Volumes
 | Volume | Required | Function | Example |
