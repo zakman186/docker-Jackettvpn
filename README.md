@@ -61,13 +61,17 @@ $ docker run --privileged  -d \
 # Access the WebUI
 Access http://IPADDRESS:8080 from a browser on the same network.
 
-**Note:** qBittorrent throws a [Origin header & Target origin mismatch](https://github.com/qbittorrent/qBittorrent/issues/6977#issuecomment-309304385) if trying to open the WebUI in unRAID with the WebUI link. Type http://IPADDRESS:PORT into a browser on the same network and it will work. 
-
 ## Default Credentials
 | Credential | Default Value |
 |----------|----------|
-|`WebUI Username`|admin |
-|`WebUI Password`|adminadmin |
+|`WebUI Username`| admin |
+|`WebUI Password`| adminadmin |
+
+## Origin header & Target origin mismatch
+qBittorrent throws a [Origin header & Target origin mismatch](https://github.com/qbittorrent/qBittorrent/issues/6977#issuecomment-309304385) if trying to open the WebUI in unRAID with the WebUI link. Type http://IPADDRESS:PORT into a browser on the same network and it will work. 
+
+## WebUI: Invalid Host header, port mismatch
+qBittorrent throws a [WebUI: Invalid Host header, port mismatch](https://github.com/qbittorrent/qBittorrent/issues/7641) error if you use port forwarding with bridge networking due to security features to prevent DNS rebinding attacks. If you need to run qBittorrent on different ports, instead edit the WEBUI_PORT_ENV and/or INCOMING_PORT_ENV variables AND the exposed ports to change the native ports qBittorrent uses.
 
 # How to use OpenVPN
 The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container again. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
