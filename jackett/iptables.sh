@@ -94,7 +94,7 @@ iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACC
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
-# accept input to qbittorrent webui port
+# accept input to jackett webui port
 if [ -z "${WEBUI_PORT}" ]; then
 	iptables -A INPUT -i eth0 -p tcp --dport 9117 -j ACCEPT
 	iptables -A INPUT -i eth0 -p tcp --sport 9117 -j ACCEPT
@@ -162,4 +162,4 @@ echo "--------------------"
 iptables -S
 echo "--------------------"
 
-exec /bin/bash /etc/qbittorrent/start.sh
+exec /bin/bash /etc/jackett/start.sh
