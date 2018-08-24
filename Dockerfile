@@ -1,34 +1,55 @@
-# qBittorrent and OpenVPN
+# Jackett and OpenVPN
 #
-# Version 1.8
+# Version Development
 
 FROM ubuntu:18.04
-MAINTAINER MarkusMcNugen
-
-VOLUME /downloads
-VOLUME /config
+MAINTAINER DyonR
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV XDG_DATA_HOME="/config" \
+XDG_CONFIG_HOME="/config"
+
+WORKDIR /opt
 
 RUN usermod -u 99 nobody
 
+#make directories
+RUN mkdir -p /blackhole /config
+
 # Update packages and install software
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends apt-utils openssl \
-    && apt-get install -y software-properties-common \
-    && add-apt-repository ppa:qbittorrent-team/qbittorrent-stable \
-    && apt-get update \
-    && apt-get install -y qbittorrent-nox openvpn curl moreutils net-tools dos2unix kmod iptables ipcalc \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt update \
+    && apt -y install \
+    apt-transport-https \
+    wget \
+    curl \
+    gnupg \
+    sed \
+    openvpn \
+    curl \
+    moreutils \
+    net-tools \
+    dos2unix \
+    kmod \
+    iptables \
+    ipcalc\
+    grep \
+    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+    && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" >> /etc/apt/sources.list.d/mono-official-stable.list \
+    && apt update \
+    && apt -y install \
+    ca-certificates-mono \
+    libcurl4-openssl-dev \
+    mono-devel 
 
-# Add configuration and scripts
-ADD openvpn/ /etc/openvpn/
-ADD qbittorrent/ /etc/qbittorrent/
+#Install jackett
+RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
+    && curl -o /opt/Jackett.Binaries.Mono.tar.gz -L https://github.com/Jackett/Jackett/releases/download/$jackett_latest/Jackett.Binaries.Mono.tar.gz \
+    && tar -xvzf /opt/Jackett.Binaries.Mono.tar.gz \
+    && rm /opt/Jackett.Binaries.Mono.tar.gz
 
-RUN chmod +x /etc/qbittorrent/*.sh /etc/qbittorrent/*.init /etc/openvpn/*.sh
+VOLUME /blackhole /config
 
-# Expose ports and run
-EXPOSE 8080
-EXPOSE 8999
-EXPOSE 8999/udp
+EXPOSE 9117
+#ENTRYPOINT ["/usr/bin/mono", "--debug", "/opt/Jackett/JackettConsole.exe"]
+#CMD ["-x", "true"]
 CMD ["/bin/bash", "/etc/openvpn/start.sh"]
