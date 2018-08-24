@@ -38,8 +38,8 @@ $ docker run --privileged  -d \
 |`VPN_ENABLED`| Yes | Enable VPN? (yes/no) Default:yes|`VPN_ENABLED=yes`|
 |`VPN_USERNAME`| No | If username and password provided, configures ovpn file automatically |`VPN_USERNAME=ad8f64c02a2de`|
 |`VPN_PASSWORD`| No | If username and password provided, configures ovpn file automatically |`VPN_PASSWORD=ac98df79ed7fb`|
-|`LAN_NETWORK`| Yes | Local Network with CIDR notation |`LAN_NETWORK=192.168.1.0/24`|
-|`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=8.8.8.8,8.8.4.4`|
+|`LAN_NETWORK`| Yes | Local Network with CIDR notation |`LAN_NETWORK=192.168.0.0/24`|
+|`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=1.1.1.1,1.0.0.1`|
 |`PUID`| No | UID applied to config files and downloads |`PUID=99`|
 |`PGID`| No | GID applied to config files and downloads |`PGID=100`|
 |`WEBUI_PORT_ENV`| No | Applies WebUI port to qBittorrents config at boot (Must change exposed ports to match)  |`WEBUI_PORT_ENV=8080`|
@@ -59,11 +59,11 @@ $ docker run --privileged  -d \
 # Access the WebUI
 Access http://IPADDRESS:PORT from a browser on the same network.
 
-## Default Credentials
+## Default Info
 | Credential | Default Value |
 |----------|----------|
-|`WebUI Username`| admin |
-|`WebUI Password`| adminadmin |
+|`API Key`| Randomly generated |
+|`WebUI Password`| No password |
 
 # How to use OpenVPN
 The container will fail to boot if `VPN_ENABLED` is set to yes or empty and a .ovpn is not present in the /config/openvpn directory. Drop a .ovpn file from your VPN provider into /config/openvpn and start the container again. You may need to edit the ovpn configuration file to load your VPN credentials from a file by setting `auth-user-pass`.
