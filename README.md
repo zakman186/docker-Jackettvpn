@@ -23,12 +23,10 @@ $ docker run --privileged  -d \
               -v /your/config/path/:/config \
               -v /your/downloads/path/:/downloads \
               -e "VPN_ENABLED=yes" \
-              -e "LAN_NETWORK=192.168.1.0/24" \
-              -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
-              -p 8080:8080 \
-              -p 8999:8999 \
-              -p 8999:8999/udp \
-              markusmcnugen/qbittorrentvpn
+              -e "LAN_NETWORK=192.168.0.0/24" \
+              -e "NAME_SERVERS=1.1.1.1,1.0.0.1" \
+              -p 9117:9117 \
+              dyonr/jackettvpn
 ```
 
 # Variables, Volumes, and Ports
@@ -42,8 +40,7 @@ $ docker run --privileged  -d \
 |`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=1.1.1.1,1.0.0.1`|
 |`PUID`| No | UID applied to config files and downloads |`PUID=99`|
 |`PGID`| No | GID applied to config files and downloads |`PGID=100`|
-|`WEBUI_PORT_ENV`| No | Applies WebUI port to qBittorrents config at boot (Must change exposed ports to match)  |`WEBUI_PORT_ENV=8080`|
-|`INCOMING_PORT_ENV`| No | Applies Incoming port to qBittorrents config at boot (Must change exposed ports to match) |`INCOMING_PORT_ENV=8999`|
+|`WEBUI_PORT`| No | Sets the port of the Jackett server in the ServerConfig.json, needs to match the exposed port in the Dockerfile  |`WEBUI_PORT=9117`|
 
 ## Volumes
 | Volume | Required | Function | Example |
@@ -54,12 +51,13 @@ $ docker run --privileged  -d \
 ## Ports
 | Port | Proto | Required | Function | Example |
 |----------|----------|----------|----------|----------|
-| `8080` | TCP | Yes | Jackett WebUI | `9117:9117`|
+| `9117` | TCP | Yes | Jackett WebUI | `9117:9117`|
 
 # Access the WebUI
-Access http://IPADDRESS:PORT from a browser on the same network.
+Access http://IPADDRESS:PORT from a browser on the same network. (for example: http://192.168.0.90:9117)
 
 ## Default Info
+API Keys are randomly generated the first time that Jackett starts up. There is no Web UI password configured. This can be done manually from the Web UI
 | Credential | Default Value |
 |----------|----------|
 |`API Key`| Randomly generated |
@@ -105,12 +103,10 @@ $ docker run --privileged  -d \
               -v /your/config/path/:/config \
               -v /your/downloads/path/:/downloads \
               -e "VPN_ENABLED=yes" \
-              -e "LAN_NETWORK=192.168.1.0/24" \
-              -e "NAME_SERVERS=8.8.8.8,8.8.4.4" \
-              -p 8080:8080 \
-              -p 8999:8999 \
-              -p 8999:8999/udp \
-              qbittorrentvpn
+              -e "LAN_NETWORK=192.168.0.0/24" \
+              -e "NAME_SERVERS=1.1.1.1,1.0.0.1" \
+              -p 9117:9117 \
+              dyonr/jackettvpn
 ```
 
 This will start a container as described in the "Run container from Docker registry" section.
