@@ -1,4 +1,4 @@
-[preview]: https://raw.githubusercontent.com/MarkusMcNugen/docker-templates/master/qbittorrentvpn/Screenshot.png "Jackett Preview"
+[preview]: https://raw.githubusercontent.com/DyonR/docker-Jackettvpn-template/master/Screenshots/mainpage.png "Jackett Preview"
 
 # Jackett and OpenVPN
 Docker container which runs the latest headless Jackett Server while connecting to OpenVPN with iptables killswitch to prevent IP leakage when the tunnel goes down.
