@@ -1,58 +1,42 @@
 #!/bin/bash
-if [[ ! -e /config/qBittorrent ]]; then
-	mkdir -p /config/qBittorrent/config/
-	chown -R ${PUID}:${PGID} /config/qBittorrent
-else
-	chown -R ${PUID}:${PGID} /config/qBittorrent
+if [[ ! -e /config/Jackett ]]; then
+	mkdir -p /config/Jackett
+fi
+chown -R ${PUID}:${PGID} /config/Jackett
+
+if [[ ! -e /config/Jackett/ServerConfig.json ]]; then
+	/bin/cp /etc/jackett/ServerConfig.json /config/Jackett/ServerConfig.json
+	chmod 755 /config/Jackett/ServerConfig.json
 fi
 
-if [[ ! -e /config/qBittorrent/config/qBittorrent.conf ]]; then
-	/bin/cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
-	chmod 755 /config/qBittorrent/config/qBittorrent.conf
-fi
-
-# Set qBittorrent WebUI and Incoming ports
+# Set Jackett WebUI Port
 if [ ! -z "${WEBUI_PORT}" ]; then
-	webui_port_exist=$(cat /config/qBittorrent/config/qBittorrent.conf | grep -m 1 "WebUI\Port=${WEBUI_PORT}")
+	webui_port_exist=$(cat /config/Jackett/ServerConfig.json | grep -m 1 "  \"Port\": ${WEBUI_PORT},")
 	if [[ -z "${webui_port_exist}" ]]; then
-		webui_exist=$(cat /config/qBittorrent/config/qBittorrent.conf | grep -m 1 'WebUI\Port')
+		webui_exist=$(cat /config/Jackett/ServerConfig.json | grep -m 1 '  \"Port\": ')
 		if [[ ! -z "${webui_exist}" ]]; then
 			# Get line number of WebUI Port
-			LINE_NUM=$(grep -Fn -m 1 'WebUI\Port' /config/qBittorrent/config/qBittorrent.conf | cut -d: -f 1)
-			sed -i "${LINE_NUM}s@.*@WebUI\Port=${WEBUI_PORT}\n@" /config/qBittorrent/config/qBittorrent.conf
+			LINE_NUM=$(grep -Fn -m 1 '  "Port":' /config/Jackett/ServerConfig.json | cut -d: -f 1)
+			sed -i "${LINE_NUM}s@.*@  \"Port\": ${WEBUI_PORT},@" /config/Jackett/ServerConfig.json
 		else
-			echo "WebUI\Port=${WEBUI_PORT}" >> /config/qBittorrent/config/qBittorrent.conf
+			echo "  \"Port\": ${WEBUI_PORT}," >> /config/Jackett/ServerConfig.json
 		fi
 	fi
 fi
 
-if [ ! -z "${INCOMING_PORT}" ]; then
-	incoming_port_exist=$(cat /config/qBittorrent/config/qBittorrent.conf | grep -m 1 "Connection\PortRangeMin=${INCOMING_PORT}")
-	if [[ -z "${incoming_port_exist}" ]]; then
-		incoming_exist=$(cat /config/qBittorrent/config/qBittorrent.conf | grep -m 1 'Connection\PortRangeMin')
-		if [[ ! -z "${incoming_exist}" ]]; then
-			# Get line number of Incoming
-			LINE_NUM=$(grep -Fn -m 1 'Connection\PortRangeMin' /config/qBittorrent/config/qBittorrent.conf | cut -d: -f 1)
-			sed -i "${LINE_NUM}s@.*@Connection\PortRangeMin=${INCOMING_PORT}\n@" /config/qBittorrent/config/qBittorrent.conf
-		else
-			echo "Connection\PortRangeMin=${INCOMING_PORT}" >> /config/qBittorrent/config/qBittorrent.conf
-		fi
-	fi
-fi
-
-echo "[info] Starting qBittorrent daemon..." | ts '%Y-%m-%d %H:%M:%.S'
-/bin/bash /etc/qbittorrent/qbittorrent.init start &
-chmod -R 755 /config/qBittorrent
+echo "[info] Starting Jackett daemon..." | ts '%Y-%m-%d %H:%M:%.S'
+/bin/bash /etc/jackett/jackett.init start &
+chmod -R 755 /config/Jackett
 
 sleep 1
-qbpid=$(pgrep -o -x qbittorrent-nox) 
-echo "[info] qBittorrent PID: $qbpid" | ts '%Y-%m-%d %H:%M:%.S'
+jackettpid=$(pgrep -o -x mono) 
+echo "[info] Jackett PID: $jackettpid" | ts '%Y-%m-%d %H:%M:%.S'
 
-if [ -e /proc/$qbpid ]; then
-	if [[ -e /config/qBittorrent/data/logs/qbittorrent.log ]]; then
-		chmod 775 /config/qBittorrent/data/logs/qbittorrent.log
+if [ -e /proc/$jackettpid ]; then
+	if [[ -e /config/Jackett/log.txt ]]; then
+		chmod 775 /config/Jackett/log.txt
 	fi
 	sleep infinity
 else
-	echo "qBittorrent failed to start!"
+	echo "Jackett failed to start!"
 fi

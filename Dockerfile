@@ -14,7 +14,7 @@ WORKDIR /opt
 RUN usermod -u 99 nobody
 
 #make directories
-RUN mkdir -p /blackhole /config
+RUN mkdir -p /blackhole /config/Jackett /etc/jackett
 
 # Update packages and install software
 RUN apt update \
@@ -49,7 +49,10 @@ RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett
 
 VOLUME /blackhole /config
 
+ADD openvpn/ /etc/openvpn/
+ADD jackett/ /etc/jackett/
+
+RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh
+
 EXPOSE 9117
-#ENTRYPOINT ["/usr/bin/mono", "--debug", "/opt/Jackett/JackettConsole.exe"]
-#CMD ["-x", "true"]
 CMD ["/bin/bash", "/etc/openvpn/start.sh"]

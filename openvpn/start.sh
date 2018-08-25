@@ -164,7 +164,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	cd /config/openvpn
 	exec openvpn --config ${VPN_CONFIG} &
 	#exec /bin/bash /etc/openvpn/openvpn.init start &
-	exec /bin/bash /etc/qbittorrent/iptables.sh
+	exec /bin/bash /etc/jackett/iptables.sh
 else
-	exec /bin/bash /etc/qbittorrent/start.sh
+	exec /bin/bash /etc/jackett/start.sh
 fi

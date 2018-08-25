@@ -19,16 +19,16 @@ GROUP=${PGID}
 
 # No need to edit these. Logging is sent to /config/qBittorrent/data/logs/qbittorrent-daemon.log by default.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
-SCRIPTNAME="/etc/init.d/qbittorrent"
-NAME="qbittorrent-nox"
-DESC="qBittorrent"
+SCRIPTNAME="/etc/init.d/jackett"
+NAME="mono"
+DESC="mono"
 PIDFILE="/var/run/$NAME.pid"
-QBTLOGPATH="/config/qBittorrent/data/logs/"
-QBTLOG="qbittorrent-daemon.log"
+JACKETTLOGPATH="/config/Jackett/"
+JACKETTLOG="log.txt"
 
-DAEMON="/usr/bin/qbittorrent-nox"
-DAEMON_ARGS="--profile=/config"
-DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $QBTLOGPATH$QBTLOG 2>&1"
+DAEMON="mono"
+DAEMON_ARGS="/opt/Jackett/JackettConsole.exe --NoUpdates"
+DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $JACKETTLOGPATH$JACKETTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
 
@@ -51,24 +51,24 @@ do_start()
 {
 
 	#Check if log path exists. If it doesn't exist, create it.
-	if [ ! -e $QBTLOGPATH ]; then
-		mkdir -p $QBTLOGPATH
-		chown -R ${PUID}:${PGID} /config/qBittorrent
+	if [ ! -e $JACKETTLOGPATH ]; then
+		mkdir -p $JACKETTLOGPATH
+		chown -R ${PUID}:${PGID} /config/Jackett
 	fi
 	
 	#Check for log file. If it doesn't exist, create it.
-	if [ -f $QBTLOGPATH$QBTLOG ];
+	if [ -f $JACKETTLOGPATH$JACKETTLOG ];
 	then
-        	echo "Logging to $QBTLOGPATH$QBTLOG."
+        	echo "Logging to $JACKETTLOGPATH$JACKETTLOG."
 	else
-        	echo "Log file $QBTLOGPATH$QBTLOG doesn't exist. Creating it..."
-	        touch $QBTLOGPATH$QBTLOG
-        	if [ -f $QBTLOGPATH$QBTLOG ];
+        	echo "Log file $JACKETTLOGPATH$JACKETTLOG doesn't exist. Creating it..."
+	        touch $JACKETTLOGPATH$JACKETTLOG
+        	if [ -f $JACKETTLOGPATH$JACKETTLOG ];
                 	then
-				chown $USER:$GROUP $QBTLOGPATH$QBTLOG
-                        	echo "Logfile created. Logging to $QBTLOGPATH$QBTLOG"
+				chown $USER:$GROUP $JACKETTLOGPATH$JACKETTLOG
+                        	echo "Logfile created. Logging to $JACKETTLOGPATH$JACKETTLOG"
 	                else
-        	                echo "Couldn't create logfile $QBTLOGPATH$QBTLOG. Please investigate."
+        	                echo "Couldn't create logfile $JACKETTLOGPATH$JACKETTLOG. Please investigate."
 	        fi
 	fi
 
@@ -135,7 +135,7 @@ case "$1" in
 	;;
   *)
 	#echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
-	echo "Usage: service qbittorrent {start|stop|status|restart|force-reload}" >&2
+	echo "Usage: service jackett {start|stop|status|restart|force-reload}" >&2
 	exit 3
 	;;
 esac
