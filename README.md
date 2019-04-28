@@ -102,12 +102,10 @@ $ docker build -t jackettvpn .
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
-              -v /your/downloads/path/:/downloads \
+              -v /your/blackhole/path/:/blackhole \
               -e "VPN_ENABLED=yes" \
               -e "LAN_NETWORK=192.168.0.0/24" \
               -e "NAME_SERVERS=1.1.1.1,1.0.0.1" \
               -p 9117:9117 \
               dyonr/jackettvpn
 ```
-
-This will start a container as described in the "Run container from Docker registry" section.
