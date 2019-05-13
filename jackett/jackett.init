@@ -27,7 +27,7 @@ JACKETTLOGPATH="/config/Jackett/"
 JACKETTLOG="log.txt"
 
 DAEMON="mono"
-DAEMON_ARGS="/opt/Jackett/JackettConsole.exe --NoUpdates"
+DAEMON_ARGS="/opt/Jackett/jackett --NoRestart --NoUpdates"
 DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $JACKETTLOGPATH$JACKETTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
