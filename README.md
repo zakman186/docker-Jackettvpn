@@ -8,7 +8,7 @@ Docker container which runs the latest headless Jackett Server while connecting 
 ## Docker Features
 * Base: Ubuntu 18.04
 * Latest Jackett
-* Size: <300MB
+* Size: < 150MB
 * Selectively enable or disable OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
 * Specify name servers to add to container
