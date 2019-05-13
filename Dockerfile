@@ -32,7 +32,14 @@ RUN apt update \
     kmod \
     iptables \
     ipcalc\
-    grep
+    grep \
+    libicu60 \
+    libcurl4 \
+    liblttng-ust0 \
+    libssl1.0.0 \
+    libkrb5-3 \
+    zlib1g
+
 
 #Install jackett
 RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \

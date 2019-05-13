@@ -26,8 +26,8 @@ PIDFILE="/var/run/$NAME.pid"
 JACKETTLOGPATH="/config/Jackett/"
 JACKETTLOG="log.txt"
 
-DAEMON="jackett"
-DAEMON_ARGS="/opt/Jackett/jackett --NoRestart --NoUpdates"
+DAEMON="/opt/Jackett/jackett"
+DAEMON_ARGS="--NoRestart --NoUpdates"
 DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $JACKETTLOGPATH$JACKETTLOG 2>&1"
 
 export DBUS_SESSION_BUS_ADDRESS=""
