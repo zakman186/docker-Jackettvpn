@@ -33,26 +33,26 @@ RUN apt update \
     iptables \
     ipcalc\
     grep \
-    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-    && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" >> /etc/apt/sources.list.d/mono-official-stable.list \
-    && apt update \
-    && apt -y install \
-    ca-certificates-mono \
-    libcurl4-openssl-dev \
-    mono-devel 
+    libicu60 \
+    libcurl4 \
+    liblttng-ust0 \
+    libssl1.0.0 \
+    libkrb5-3 \
+    zlib1g
+
 
 #Install jackett
 RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
-    && curl -o /opt/Jackett.Binaries.Mono.tar.gz -L https://github.com/Jackett/Jackett/releases/download/$jackett_latest/Jackett.Binaries.Mono.tar.gz \
-    && tar -xvzf /opt/Jackett.Binaries.Mono.tar.gz \
-    && rm /opt/Jackett.Binaries.Mono.tar.gz
+    && curl -o /opt/Jackett.Binaries.LinuxAMDx64.tar.gz -L https://github.com/Jackett/Jackett/releases/download/$jackett_latest/Jackett.Binaries.LinuxAMDx64.tar.gz \
+    && tar -xvzf /opt/Jackett.Binaries.LinuxAMDx64.tar.gz \
+    && rm /opt/Jackett.Binaries.LinuxAMDx64.tar.gz
 
 VOLUME /blackhole /config
 
 ADD openvpn/ /etc/openvpn/
 ADD jackett/ /etc/jackett/
 
-RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh
+RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh /opt/Jackett/jackett
 
 EXPOSE 9117
 CMD ["/bin/bash", "/etc/openvpn/start.sh"]

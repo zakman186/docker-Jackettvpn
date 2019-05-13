@@ -29,7 +29,7 @@ echo "[info] Starting Jackett daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 chmod -R 755 /config/Jackett
 
 sleep 1
-jackettpid=$(pgrep -o -x mono) 
+jackettpid=$(pgrep -o -x jackett) 
 echo "[info] Jackett PID: $jackettpid" | ts '%Y-%m-%d %H:%M:%.S'
 
 if [ -e /proc/$jackettpid ]; then
