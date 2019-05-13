@@ -32,7 +32,7 @@ RUN apt update \
     kmod \
     iptables \
     ipcalc\
-    grep \
+    grep
 
 #Install jackett
 RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
@@ -45,7 +45,7 @@ VOLUME /blackhole /config
 ADD openvpn/ /etc/openvpn/
 ADD jackett/ /etc/jackett/
 
-RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh
+RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh /opt/Jackett/jackett
 
 EXPOSE 9117
 CMD ["/bin/bash", "/etc/openvpn/start.sh"]
