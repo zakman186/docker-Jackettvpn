@@ -20,13 +20,13 @@ GROUP=${PGID}
 # No need to edit these. Logging is sent to /config/qBittorrent/data/logs/qbittorrent-daemon.log by default.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 SCRIPTNAME="/etc/init.d/jackett"
-NAME="mono"
-DESC="mono"
+NAME="jackett"
+DESC="jackett"
 PIDFILE="/var/run/$NAME.pid"
 JACKETTLOGPATH="/config/Jackett/"
 JACKETTLOG="log.txt"
 
-DAEMON="mono"
+DAEMON="jackett"
 DAEMON_ARGS="/opt/Jackett/jackett --NoRestart --NoUpdates"
 DAEMONSTRING="$DAEMON $DAEMON_ARGS >> $JACKETTLOGPATH$JACKETTLOG 2>&1"
 
