@@ -14,8 +14,9 @@ RUN usermod -u 99 nobody
 # Make directories
 RUN mkdir -p /blackhole /config/Jackett /etc/jackett
 
-# Update packages and install software
+# Update, upgrade and install required packages
 RUN apt update \
+    && apt -y upgrade \
     && apt -y install \
     apt-transport-https \
     wget \
