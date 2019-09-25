@@ -1,6 +1,4 @@
-# Jackett and OpenVPN
-#
-# Version Development
+# Jackett and OpenVPN, JackettVPN
 
 FROM ubuntu:18.04
 MAINTAINER DyonR
@@ -13,7 +11,7 @@ WORKDIR /opt
 
 RUN usermod -u 99 nobody
 
-#make directories
+# Make directories
 RUN mkdir -p /blackhole /config/Jackett /etc/jackett
 
 # Update packages and install software
@@ -41,7 +39,7 @@ RUN apt update \
     zlib1g
 
 
-#Install jackett
+# Install Jackett
 RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
     && curl -o /opt/Jackett.Binaries.LinuxAMDx64.tar.gz -L https://github.com/Jackett/Jackett/releases/download/$jackett_latest/Jackett.Binaries.LinuxAMDx64.tar.gz \
     && tar -xvzf /opt/Jackett.Binaries.LinuxAMDx64.tar.gz \
