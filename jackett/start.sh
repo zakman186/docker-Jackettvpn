@@ -9,6 +9,34 @@ if [[ ! -e /config/Jackett/ServerConfig.json ]]; then
 	chmod 755 /config/Jackett/ServerConfig.json
 fi
 
+## Check for missing group
+/bin/egrep  -i "^${PGID}:" /etc/passwd
+if [ $? -eq 0 ]; then
+   echo "Group $PGID exists"
+else
+   echo "Adding $PGID group"
+	 groupadd -g $PGID jackett
+fi
+
+## Check for missing userid
+/bin/egrep  -i "^${PUID}:" /etc/passwd
+if [ $? -eq 0 ]; then
+   echo "User $PUID exists in /etc/passwd"
+else
+   echo "Adding $PUID user"
+	 useradd -c "jackett user" -g $PGID -u $PUID jackett
+fi
+
+# set umask
+export UMASK=$(echo "${UMASK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
+if [[ ! -z "${UMASK}" ]]; then
+  echo "[info] UMASK defined as '${UMASK}'" | ts '%Y-%m-%d %H:%M:%.S'
+else
+  echo "[warn] UMASK not defined (via -e UMASK), defaulting to '002'" | ts '%Y-%m-%d %H:%M:%.S'
+  export UMASK="002"
+fi
+
 # Set Jackett WebUI Port
 if [ ! -z "${WEBUI_PORT}" ]; then
 	webui_port_exist=$(cat /config/Jackett/ServerConfig.json | grep -m 1 "  \"Port\": ${WEBUI_PORT},")
