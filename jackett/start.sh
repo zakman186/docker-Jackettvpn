@@ -11,7 +11,7 @@ fi
 
 # Check for missing Group / PGID
 /bin/egrep  -i "^${PGID}:" /etc/passwd
-if [ $? -eq 1 ]; then
+if [ $? -eq 0 ]; then
    echo "A group with PGID $PGID already exists in /etc/passwd, nothing to do."
 else
    echo "A group with PGID $PGID does not exist, adding a group called 'jackett' with PGID $PGID"
@@ -20,7 +20,7 @@ fi
 
 # Check for missing User / PUID
 /bin/egrep  -i "^${PUID}:" /etc/passwd
-if [ $? -eq 1 ]; then
+if [ $? -eq 0 ]; then
    echo "An user with PUID $PUID already exists in /etc/passwd, nothing to do."
 else
    echo "An user with PUID $PUID does not exist, adding an user called 'jackett user' with PUID $PUID"
