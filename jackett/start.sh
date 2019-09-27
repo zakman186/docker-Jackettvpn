@@ -9,22 +9,22 @@ if [[ ! -e /config/Jackett/ServerConfig.json ]]; then
 	chmod 755 /config/Jackett/ServerConfig.json
 fi
 
-## Check for missing group
+# Check for missing group
 /bin/egrep  -i "^${PGID}:" /etc/passwd
 if [ $? -eq 0 ]; then
-   echo "Group $PGID exists"
+   echo "A group with PGID $PGID already exists in /etc/passwd, nothing to do."
 else
-   echo "Adding $PGID group"
-	 groupadd -g $PGID jackett
+   echo "A group with PGID $PGID does not exist, adding a group called 'jackett' with PGID $PGID"
+   groupadd -g $PGID jackett
 fi
 
-## Check for missing userid
+# Check for missing userid
 /bin/egrep  -i "^${PUID}:" /etc/passwd
 if [ $? -eq 0 ]; then
-   echo "User $PUID exists in /etc/passwd"
+   echo "An user with PUID $PUID already exists in /etc/passwd, nothing to do."
 else
-   echo "Adding $PUID user"
-	 useradd -c "jackett user" -g $PGID -u $PUID jackett
+   echo "An user with PUID $PUID does not exist, adding an user called 'jackett user' with PUID $PUID"
+   useradd -c "jackett user" -g $PGID -u $PUID jackett
 fi
 
 # set umask
@@ -61,8 +61,8 @@ jackettpid=$(pgrep -o -x jackett)
 echo "[info] Jackett PID: $jackettpid" | ts '%Y-%m-%d %H:%M:%.S'
 
 if [ -e /proc/$jackettpid ]; then
-	if [[ -e /config/Jackett/log.txt ]]; then
-		chmod 775 /config/Jackett/log.txt
+	if [[ -e /config/Jackett/Logs/log.txt ]]; then
+		chmod 775 /config/Jackett/Logs/log.txt
 	fi
 	sleep infinity
 else

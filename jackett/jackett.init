@@ -1,29 +1,31 @@
 #!/bin/bash
 ### BEGIN INIT INFO
-# Provides:          qbittorrent-nox
+# Provides:          jackett
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Starts QBittorrent
-# Description:       Start qbittorrent-nox on start. Change USER= before running
+# Short-Description: Starts Jackett
+# Description:       Start jackett on start. Change USER= before running
 ### END INIT INFO
 
 # Author: Jesper Smith
-# Edited by MarkusMcNugen
+# Edited by MarkusMcNugen [MarkusMcNugen/docker-qBittorrentvpn]
 # Edited log paths for docker, added umask and group to chuid option
 
-#Edit the user that qbittorrent-nox will run as.
+# Edited by DyonR [DyonR/docket-Jackettvpn]
+# Edited so it would work for Jackett
+
+# Edit the user that Jackett will run as.
 USER=${PUID}
 GROUP=${PGID}
 
-# No need to edit these. Logging is sent to /config/qBittorrent/data/logs/qbittorrent-daemon.log by default.
 PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 SCRIPTNAME="/etc/init.d/jackett"
 NAME="jackett"
 DESC="jackett"
 PIDFILE="/var/run/$NAME.pid"
-JACKETTLOGPATH="/config/Jackett/"
+JACKETTLOGPATH="/config/Jackett/Logs/"
 JACKETTLOG="log.txt"
 
 DAEMON="/opt/Jackett/jackett"
@@ -50,13 +52,13 @@ umask 002
 do_start()
 {
 
-	#Check if log path exists. If it doesn't exist, create it.
+	# Check if log path exists. If it doesn't exist, create it.
 	if [ ! -e $JACKETTLOGPATH ]; then
 		mkdir -p $JACKETTLOGPATH
 		chown -R ${PUID}:${PGID} /config/Jackett
 	fi
 	
-	#Check for log file. If it doesn't exist, create it.
+	# Check for log file. If it doesn't exist, create it.
 	if [ -f $JACKETTLOGPATH$JACKETTLOG ];
 	then
         	echo "Logging to $JACKETTLOGPATH$JACKETTLOG."
