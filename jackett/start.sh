@@ -9,25 +9,25 @@ if [[ ! -e /config/Jackett/ServerConfig.json ]]; then
 	chmod 755 /config/Jackett/ServerConfig.json
 fi
 
-# Check for missing group
+# Check for missing Group / PGID
 /bin/egrep  -i "^${PGID}:" /etc/passwd
-if [ $? -eq 0 ]; then
+if [ $? -eq 1 ]; then
    echo "A group with PGID $PGID already exists in /etc/passwd, nothing to do."
 else
    echo "A group with PGID $PGID does not exist, adding a group called 'jackett' with PGID $PGID"
    groupadd -g $PGID jackett
 fi
 
-# Check for missing userid
+# Check for missing User / PUID
 /bin/egrep  -i "^${PUID}:" /etc/passwd
-if [ $? -eq 0 ]; then
+if [ $? -eq 1 ]; then
    echo "An user with PUID $PUID already exists in /etc/passwd, nothing to do."
 else
    echo "An user with PUID $PUID does not exist, adding an user called 'jackett user' with PUID $PUID"
    useradd -c "jackett user" -g $PGID -u $PUID jackett
 fi
 
-# set umask
+# Set umask
 export UMASK=$(echo "${UMASK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 if [[ ! -z "${UMASK}" ]]; then
