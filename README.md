@@ -21,7 +21,7 @@ To run the container use this command:
 ```
 $ docker run --privileged  -d \
               -v /your/config/path/:/config \
-              -v /your/downloads/path/:/downloads \
+              -v /your/downloads/path/:/blackhole \
               -e "VPN_ENABLED=yes" \
               -e "LAN_NETWORK=192.168.0.0/24" \
               -e "NAME_SERVERS=1.1.1.1,1.0.0.1" \
@@ -40,6 +40,7 @@ $ docker run --privileged  -d \
 |`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=1.1.1.1,1.0.0.1`|
 |`PUID`| No | UID applied to config files and blackhole |`PUID=99`|
 |`PGID`| No | GID applied to config files and blackhole |`PGID=100`|
+|`UMASK`| No | |`UMASK=002`|
 |`WEBUI_PORT`| No | Sets the port of the Jackett server in the ServerConfig.json, needs to match the **exposed port** in the Dockerfile  |`WEBUI_PORT=9117`|
 
 ## Volumes
