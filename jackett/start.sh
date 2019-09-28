@@ -4,6 +4,9 @@ if [[ ! -e /config/Jackett ]]; then
 fi
 chown -R ${PUID}:${PGID} /config/Jackett
 
+# Set the rights on the /blackhole folder
+chown -R ${PUID}:${PGID} /blackhole
+
 if [[ ! -e /config/Jackett/ServerConfig.json ]]; then
 	/bin/cp /etc/jackett/ServerConfig.json /config/Jackett/ServerConfig.json
 	chmod 755 /config/Jackett/ServerConfig.json
