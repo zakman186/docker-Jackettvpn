@@ -38,6 +38,7 @@ RUN apt update \
     libssl1.0.0 \
     libkrb5-3 \
     zlib1g \
+    tzdata \
     && apt-get clean \
     && rm -rf \
     /var/lib/apt/lists/* \
