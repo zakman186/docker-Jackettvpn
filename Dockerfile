@@ -59,5 +59,7 @@ ADD jackett/ /etc/jackett/
 
 RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh /opt/Jackett/jackett
 
+HEALTHCHECK --interval=5m CMD /etc/jackett/healthcheck.sh
+
 EXPOSE 9117
 CMD ["/bin/bash", "/etc/openvpn/start.sh"]
