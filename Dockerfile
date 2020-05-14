@@ -39,6 +39,7 @@ RUN apt update \
     libkrb5-3 \
     zlib1g \
     tzdata \
+    iputils-ping \
     && apt-get clean \
     && rm -rf \
     /var/lib/apt/lists/* \
