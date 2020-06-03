@@ -5,8 +5,8 @@ HOST=${HEALTH_CHECK_HOST}
 
 if [[ -z "$HOST" ]]
 then
-    echo "Host  not set! Set env 'HEALTH_CHECK_HOST'. For now, using default google.com"
-    HOST="google.com"
+    echo "Host  not set! Set env 'HEALTH_CHECK_HOST'. For now, using default one.one.one.one"
+    HOST="one.one.one.one"
 fi
 
 ping -c 1 $HOST
