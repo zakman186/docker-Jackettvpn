@@ -31,17 +31,18 @@ $ docker run --privileged  -d \
 
 # Variables, Volumes, and Ports
 ## Environment Variables
-| Variable | Required | Function | Example |
-|----------|----------|----------|----------|
-|`VPN_ENABLED`| Yes | Enable VPN? (yes/no) Default:yes|`VPN_ENABLED=yes`|
-|`VPN_USERNAME`| No | If username and password provided, configures ovpn file automatically |`VPN_USERNAME=ad8f64c02a2de`|
-|`VPN_PASSWORD`| No | If username and password provided, configures ovpn file automatically |`VPN_PASSWORD=ac98df79ed7fb`|
-|`LAN_NETWORK`| Yes | Local Network with CIDR notation |`LAN_NETWORK=192.168.0.0/24`|
-|`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=1.1.1.1,1.0.0.1`|
-|`PUID`| No | UID applied to config files and blackhole |`PUID=99`|
-|`PGID`| No | GID applied to config files and blackhole |`PGID=100`|
-|`UMASK`| No | |`UMASK=002`|
-|`WEBUI_PORT`| No | Sets the port of the Jackett server in the ServerConfig.json, needs to match the **exposed port** in the Dockerfile  |`WEBUI_PORT=9117`|
+| Variable | Required | Function | Example | Default |
+|----------|----------|----------|----------|----------|
+|`VPN_ENABLED`| Yes | Enable VPN? (yes/no) Default:yes|`VPN_ENABLED=yes`|`yes`||
+|`VPN_USERNAME`| No | If username and password provided, configures ovpn file automatically |`VPN_USERNAME=ad8f64c02a2de`||
+|`VPN_PASSWORD`| No | If username and password provided, configures ovpn file automatically |`VPN_PASSWORD=ac98df79ed7fb`||
+|`LAN_NETWORK`| Yes | Local Network with CIDR notation |`LAN_NETWORK=192.168.0.0/24`||
+|`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=1.1.1.1,1.0.0.1`|`1.1.1.1,1.0.0.1`|
+|`PUID`| No | UID applied to config files and blackhole |`PUID=99`|`99`|
+|`PGID`| No | GID applied to config files and blackhole |`PGID=100`|`100`|
+|`UMASK`| No | |`UMASK=002`|`002`|
+|`WEBUI_PORT`| No | Sets the port of the Jackett server in the ServerConfig.json, needs to match the **exposed port** in the Dockerfile  |`WEBUI_PORT=9117`|`9117`|
+|`HEALTH_CHECK_HOST`| No |This is the host or IP that the healthcheck script will use to check an active connection|`HEALTH_CHECK_HOST=one.one.one.one`|`one.one.one.one`|
 
 ## Volumes
 | Volume | Required | Function | Example |
