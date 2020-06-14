@@ -12,47 +12,6 @@ done
 
 echo "[info] WebUI port defined as ${WEBUI_PORT}" | ts '%Y-%m-%d %H:%M:%.S'
 
-# ip route
-###
-
-DEBUG=false
-
-# get default gateway of interfaces as looping through them
-DEFAULT_GATEWAY=$(ip -4 route list 0/0 | cut -d ' ' -f 3)
-
-# strip whitespace from start and end of lan_network_item
-export LAN_NETWORK=$(echo "${LAN_NETWORK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-
-echo "[info] Adding ${LAN_NETWORK} as route via docker eth0" | ts '%Y-%m-%d %H:%M:%.S'
-ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
-
-echo "[info] ip route defined as follows..." | ts '%Y-%m-%d %H:%M:%.S'
-echo "--------------------"
-ip route
-echo "--------------------"
-
-# setup iptables marks to allow routing of defined ports via eth0
-###
-
-if [[ "${DEBUG}" == "true" ]]; then
-	echo "[debug] Modules currently loaded for kernel" ; lsmod
-fi
-
-# check we have iptable_mangle, if so setup fwmark
-lsmod | grep iptable_mangle
-iptable_mangle_exit_code=$?
-
-if [[ $iptable_mangle_exit_code == 0 ]]; then
-
-	echo "[info] iptable_mangle support detected, adding fwmark for tables" | ts '%Y-%m-%d %H:%M:%.S'
-
-	# setup route for jackett webui using set-mark to route traffic for port 9117 to eth0
-	echo "9117    webui" >> /etc/iproute2/rt_tables
-	ip rule add fwmark 1 table webui
-	ip route add default via ${DEFAULT_GATEWAY} table webui
-
-fi
-
 # identify docker bridge interface name (probably eth0)
  docker_interface=$(netstat -ie | grep -vE "lo|tun|tap" | sed -n '1!p' | grep -P -o -m 1 '^[\w]+')
 if [[ "${DEBUG}" == "true" ]]; then
@@ -75,6 +34,47 @@ fi
 docker_network_cidr=$(ipcalc "${docker_ip}" "${docker_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 echo "[info] Docker network defined as ${docker_network_cidr}" | ts '%Y-%m-%d %H:%M:%.S'
 
+# ip route
+###
+
+DEBUG=false
+
+# get default gateway of interfaces as looping through them
+DEFAULT_GATEWAY=$(ip -4 route list 0/0 | cut -d ' ' -f 3)
+
+# strip whitespace from start and end of lan_network_item
+export LAN_NETWORK=$(echo "${LAN_NETWORK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
+echo "[info] Adding ${LAN_NETWORK} as route via docker "${docker_interface}"" | ts '%Y-%m-%d %H:%M:%.S'
+ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev "${docker_interface}"
+
+echo "[info] ip route defined as follows..." | ts '%Y-%m-%d %H:%M:%.S'
+echo "--------------------"
+ip route
+echo "--------------------"
+
+# setup iptables marks to allow routing of defined ports via "${docker_interface}"
+###
+
+if [[ "${DEBUG}" == "true" ]]; then
+	echo "[debug] Modules currently loaded for kernel" ; lsmod
+fi
+
+# check we have iptable_mangle, if so setup fwmark
+lsmod | grep iptable_mangle
+iptable_mangle_exit_code=$?
+
+if [[ $iptable_mangle_exit_code == 0 ]]; then
+
+	echo "[info] iptable_mangle support detected, adding fwmark for tables" | ts '%Y-%m-%d %H:%M:%.S'
+
+	# setup route for jackett webui using set-mark to route traffic for port 9117 to "${docker_interface}"
+	echo "9117    webui" >> /etc/iproute2/rt_tables
+	ip rule add fwmark 1 table webui
+	ip route add default via ${DEFAULT_GATEWAY} table webui
+
+fi
+
 # input iptable rules
 ###
 
@@ -91,15 +91,37 @@ iptables -A INPUT -i "${VPN_DEVICE_TYPE}" -j ACCEPT
 iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept input to vpn gateway
-iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
+iptables -A INPUT -i "${docker_interface}" -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
 # accept input to jackett webui port
 if [ -z "${WEBUI_PORT}" ]; then
-	iptables -A INPUT -i eth0 -p tcp --dport 9117 -j ACCEPT
-	iptables -A INPUT -i eth0 -p tcp --sport 9117 -j ACCEPT
+	iptables -A INPUT -i "${docker_interface}" -p tcp --dport 9117 -j ACCEPT
+	iptables -A INPUT -i "${docker_interface}" -p tcp --sport 9117 -j ACCEPT
 else
-	iptables -A INPUT -i eth0 -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-	iptables -A INPUT -i eth0 -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+	iptables -A INPUT -i "${docker_interface}" -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+	iptables -A INPUT -i "${docker_interface}" -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+fi
+
+# additional port list for scripts or container linking
+if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
+
+	# split comma separated string into list from ADDITIONAL_PORTS env variable
+	IFS=',' read -ra additional_port_list <<< "${ADDITIONAL_PORTS}"
+
+	# process additional ports in the list
+	for additional_port_item in "${additional_port_list[@]}"; do
+
+		# strip whitespace from start and end of additional_port_item
+		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
+		echo "[info] Adding additional incoming port ${additional_port_item} for ${docker_interface}"
+
+		# accept input to additional port for "${docker_interface}"
+		iptables -A INPUT -i "${docker_interface}" -p tcp --dport "${additional_port_item}" -j ACCEPT
+		iptables -A INPUT -i "${docker_interface}" -p tcp --sport "${additional_port_item}" -j ACCEPT
+
+	done
+
 fi
 
 # accept input icmp (ping)
@@ -124,7 +146,7 @@ iptables -A OUTPUT -o "${VPN_DEVICE_TYPE}" -j ACCEPT
 iptables -A OUTPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept output from vpn gateway
-iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
+iptables -A OUTPUT -o "${docker_interface}" -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 
 # if iptable mangle is available (kernel module) then use mark
 if [[ $iptable_mangle_exit_code == 0 ]]; then
@@ -142,13 +164,34 @@ fi
 
 # accept output from jackett webui port - used for lan access
 if [ -z "${WEBUI_PORT}" ]; then
-	iptables -A OUTPUT -o eth0 -p tcp --dport 9117 -j ACCEPT
-	iptables -A OUTPUT -o eth0 -p tcp --sport 9117 -j ACCEPT
+	iptables -A OUTPUT -o "${docker_interface}" -p tcp --dport 9117 -j ACCEPT
+	iptables -A OUTPUT -o "${docker_interface}" -p tcp --sport 9117 -j ACCEPT
 else
-	iptables -A OUTPUT -o eth0 -p tcp --dport ${WEBUI_PORT} -j ACCEPT
-	iptables -A OUTPUT -o eth0 -p tcp --sport ${WEBUI_PORT} -j ACCEPT
+	iptables -A OUTPUT -o "${docker_interface}" -p tcp --dport ${WEBUI_PORT} -j ACCEPT
+	iptables -A OUTPUT -o "${docker_interface}" -p tcp --sport ${WEBUI_PORT} -j ACCEPT
 fi
 
+# additional port list for scripts or container linking
+if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
+
+	# split comma separated string into list from ADDITIONAL_PORTS env variable
+	IFS=',' read -ra additional_port_list <<< "${ADDITIONAL_PORTS}"
+
+	# process additional ports in the list
+	for additional_port_item in "${additional_port_list[@]}"; do
+
+		# strip whitespace from start and end of additional_port_item
+		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+
+		echo "[info] Adding additional outgoing port ${additional_port_item} for ${docker_interface}"
+
+		# accept output to additional port for lan interface
+		iptables -A OUTPUT -o "${docker_interface}" -p tcp --dport "${additional_port_item}" -j ACCEPT
+		iptables -A OUTPUT -o "${docker_interface}" -p tcp --sport "${additional_port_item}" -j ACCEPT
+
+	done
+
+fi
 
 # accept output for icmp (ping)
 iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
