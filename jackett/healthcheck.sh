@@ -5,7 +5,7 @@ HOST=${HEALTH_CHECK_HOST}
 
 if [[ -z "$HOST" ]]
 then
-    echo "Host  not set! Set env 'HEALTH_CHECK_HOST'. For now, using default one.one.one.one"
+    echo "Host not set! Set env 'HEALTH_CHECK_HOST'. For now, using default one.one.one.one"
     HOST="one.one.one.one"
 fi
 

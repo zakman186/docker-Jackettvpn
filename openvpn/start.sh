@@ -18,6 +18,16 @@ else
 	export VPN_ENABLED="yes"
 fi
 
+export DISABLE_IPV6=$(echo "${DISABLE_IPV6,,}")
+echo "[info] DISABLE_IPV6 is set to '${DISABLE_IPV6}'" | ts '%Y-%m-%d %H:%M:%.S'
+if [[ $DISABLE_IPV6 == "1" || $DISABLE_IPV6 == "true" || $DISABLE_IPV6 == "yes" || $DISABLE_IPV6 == "" ]]; then
+	echo "[info] Disabling IPv6 in sysctl" | ts '%Y-%m-%d %H:%M:%.S'
+	sysctl -w net.ipv6.conf.all.disable_ipv6=1
+else
+	echo "[info] Enabling IPv6 in sysctl" | ts '%Y-%m-%d %H:%M:%.S'
+	sysctl -w net.ipv6.conf.all.disable_ipv6=0
+fi
+
 if [[ $VPN_ENABLED == "yes" ]]; then
 	# create directory to store openvpn config files
 	mkdir -p /config/openvpn
