@@ -67,7 +67,43 @@ if [ -e /proc/$jackettpid ]; then
 	if [[ -e /config/Jackett/Logs/log.txt ]]; then
 		chmod 775 /config/Jackett/Logs/log.txt
 	fi
-	sleep infinity
+	
+	HOST=${HEALTH_CHECK_HOST}
+	DEFAULT_HOST="one.one.one.one"
+	INTERVAL=${HEALTH_CHECK_INTERVAL}
+	DEFAULT_INTERVAL=300
+	
+	if [[ -z "$HOST" ]]; then
+		echo "[INFO] HEALTH_CHECK_HOST is not set. For now using default host ${DEFAULT_HOST}" | ts '%Y-%m-%d %H:%M:%.S'
+		HOST=${DEFAULT_HOST}
+	fi
+
+	if [[ -z "$HEALTH_CHECK_INTERVAL" ]]; then
+		echo "[INFO] HEALTH_CHECK_INTERVAL is not set. For now using default interval of ${DEFAULT_INTERVAL}" | ts '%Y-%m-%d %H:%M:%.S'
+		INTERVAL=${DEFAULT_INTERVAL}
+	fi
+	
+	if [[ -z "$HEALTH_CHECK_SILENT" ]]; then
+		echo "[INFO] HEALTH_CHECK_SILENT is not set. Because this variable is not set, it will be supressed by default" | ts '%Y-%m-%d %H:%M:%.S'
+		HEALTH_CHECK_SILENT=1
+	fi
+
+	while true; do
+	
+		# Ping uses both exit codes 1 and 2. Exit code 2 cannot be used for docker health checks,
+		# therefore we use this script to catch error code 2
+		ping -c 1 $HOST > /dev/null 2>&1
+		STATUS=$?
+		if [[ ${STATUS} -ne 0 ]]; then
+			echo "[ERROR] Network is down, exiting this Docker" | ts '%Y-%m-%d %H:%M:%.S'
+			exit 1
+		fi
+		if [ ! "$HEALTH_CHECK_SILENT" -eq 1 ]; then
+			echo "[INFO] Network is up" | ts '%Y-%m-%d %H:%M:%.S'
+		fi
+		sleep ${INTERVAL}
+
+	done
 else
-	echo "Jackett failed to start!"
+	echo "[ERROR] Jackett failed to start!" | ts '%Y-%m-%d %H:%M:%.S'
 fi
