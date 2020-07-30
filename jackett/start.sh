@@ -85,21 +85,6 @@ if [ ! -z "${WEBUI_PASSWORD}" ]; then
 	fi
 fi
 
-# Set Jackett WebUI Port
-if [ ! -z "${WEBUI_PORT}" ]; then
-	webui_port_exist=$(cat /config/Jackett/ServerConfig.json | grep -m 1 "  \"Port\": ${WEBUI_PORT},")
-	if [[ -z "${webui_port_exist}" ]]; then
-		webui_exist=$(cat /config/Jackett/ServerConfig.json | grep -m 1 '  \"Port\": ')
-		if [[ ! -z "${webui_exist}" ]]; then
-			# Get line number of WebUI Port
-			LINE_NUM=$(grep -Fn -m 1 '  "Port":' /config/Jackett/ServerConfig.json | cut -d: -f 1)
-			sed -i "${LINE_NUM}s@.*@  \"Port\": ${WEBUI_PORT},@" /config/Jackett/ServerConfig.json
-		else
-			echo "  \"Port\": ${WEBUI_PORT}," >> /config/Jackett/ServerConfig.json
-		fi
-	fi
-fi
-
 echo "[INFO] Starting Jackett daemon..." | ts '%Y-%m-%d %H:%M:%.S'
 /bin/bash /etc/jackett/jackett.init start &
 chmod -R 755 /config/Jackett
