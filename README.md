@@ -8,11 +8,11 @@ Docker container which runs the latest headless Jackett Server while connecting 
 ## Docker Features
 * Base: Ubuntu 18.04
 * Latest Jackett
-* Size: < 150MB
 * Selectively enable or disable OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
 * Specify name servers to add to container
 * Configure UID and GID for config files and blackhole for Jackett
+* Created with [Unraid](https://unraid.net/) in mind
 
 # Run container from Docker registry
 The container is available from the Docker registry and this is the simplest way to get it.
