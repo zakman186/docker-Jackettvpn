@@ -14,20 +14,20 @@ if [ ! -e /config/Jackett/ServerConfig.json ]; then
 fi
 
 # Check for missing Group / PGID
-/bin/egrep -i "^${PGID}:" /etc/passwd
+grep $"${PGID}:" /etc/group
 if [ $? -eq 0 ]; then
-	echo "A group with PGID $PGID already exists in /etc/passwd, nothing to do."
+	echo "A group with PGID $PGID already exists in /etc/group, nothing to do." | ts '%Y-%m-%d %H:%M:%.S'
 else
-	echo "A group with PGID $PGID does not exist, adding a group called 'jackett' with PGID $PGID"
+	echo "A group with PGID $PGID does not exist, adding a group called 'jackett' with PGID $PGID" | ts '%Y-%m-%d %H:%M:%.S'
 	groupadd -g $PGID jackett
 fi
 
 # Check for missing User / PUID
-/bin/egrep -i "^${PUID}:" /etc/passwd
+grep $"${PUID}:" /etc/passwd
 if [ $? -eq 0 ]; then
-	echo "An user with PUID $PUID already exists in /etc/passwd, nothing to do."
+	echo "An user with PUID $PUID already exists in /etc/passwd, nothing to do." | ts '%Y-%m-%d %H:%M:%.S'
 else
-	echo "An user with PUID $PUID does not exist, adding an user called 'jackett user' with PUID $PUID"
+	echo "An user with PUID $PUID does not exist, adding an user called 'jackett user' with PUID $PUID" | ts '%Y-%m-%d %H:%M:%.S'
 	useradd -c "jackett user" -g $PGID -u $PUID jackett
 fi
 
@@ -35,9 +35,9 @@ fi
 export UMASK=$(echo "${UMASK}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 if [[ ! -z "${UMASK}" ]]; then
-	echo "[INFO] UMASK defined as '${UMASK}'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "[INFO] UMASK defined as '${UMASK}'" | ts '%Y-%m-%d %H:%M:%.S' | ts '%Y-%m-%d %H:%M:%.S'
 else
-	echo "[warn] UMASK not defined (via -e UMASK), defaulting to '002'" | ts '%Y-%m-%d %H:%M:%.S'
+	echo "[WARNING] UMASK not defined (via -e UMASK), defaulting to '002'" | ts '%Y-%m-%d %H:%M:%.S'
 	export UMASK="002"
 fi
 
@@ -64,12 +64,10 @@ fi
 if [ ! -z "${WEBUI_PASSWORD}" ]; then
 	# Test to see if the password has valid characters, prinf or iconv exists with code 1 if there are invalid characters
 	printf "${WEBUI_PASSWORD}" > /dev/null 2>&1
-	if [[ $? -eq 1 ]]; then
-		echo "[ERROR] Password contains unsupported characters." | ts '%Y-%m-%d %H:%M:%.S'
-		exit 1
-	fi
+	printf_status=$?
 	printf "${WEBUI_PASSWORD}" | iconv -t utf16le > /dev/null 2>&1
-	if [[ $? -eq 1 ]]; then
+	iconv_status=$?
+	if [[ "${printf_status}" -eq 1 || "${iconv_status}" -eq 1 ]]; then
 		echo "[ERROR] Password contains unsupported characters." | ts '%Y-%m-%d %H:%M:%.S'
 		exit 1
 	fi
@@ -103,17 +101,17 @@ if [ -e /proc/$jackettpid ]; then
 	INTERVAL=${HEALTH_CHECK_INTERVAL}
 	DEFAULT_INTERVAL=300
 	
-	if [[ -z "$HOST" ]]; then
+	if [[ -z "${HOST}" ]]; then
 		echo "[INFO] HEALTH_CHECK_HOST is not set. For now using default host ${DEFAULT_HOST}" | ts '%Y-%m-%d %H:%M:%.S'
 		HOST=${DEFAULT_HOST}
 	fi
 
-	if [[ -z "$HEALTH_CHECK_INTERVAL" ]]; then
+	if [[ -z "${HEALTH_CHECK_INTERVAL}" ]]; then
 		echo "[INFO] HEALTH_CHECK_INTERVAL is not set. For now using default interval of ${DEFAULT_INTERVAL}" | ts '%Y-%m-%d %H:%M:%.S'
 		INTERVAL=${DEFAULT_INTERVAL}
 	fi
 	
-	if [[ -z "$HEALTH_CHECK_SILENT" ]]; then
+	if [[ -z "${HEALTH_CHECK_SILENT}" ]]; then
 		echo "[INFO] HEALTH_CHECK_SILENT is not set. Because this variable is not set, it will be supressed by default" | ts '%Y-%m-%d %H:%M:%.S'
 		HEALTH_CHECK_SILENT=1
 	fi
@@ -128,7 +126,7 @@ if [ -e /proc/$jackettpid ]; then
 			echo "[ERROR] Network is down, exiting this Docker" | ts '%Y-%m-%d %H:%M:%.S'
 			exit 1
 		fi
-		if [ ! "$HEALTH_CHECK_SILENT" -eq 1 ]; then
+		if [ ! "{$HEALTH_CHECK_SILENT}" -eq 1 ]; then
 			echo "[INFO] Network is up" | ts '%Y-%m-%d %H:%M:%.S'
 		fi
 		sleep ${INTERVAL}

@@ -13,19 +13,19 @@ done
 # identify docker bridge interface name (probably eth0)
 docker_interface=$(netstat -ie | grep -vE "lo|tun|tap" | sed -n '1!p' | grep -P -o -m 1 '^[\w]+')
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "[DEBUG] Docker interface defined as ${docker_interface}"
+	echo "[DEBUG] Docker interface defined as ${docker_interface}" | ts '%Y-%m-%d %H:%M:%.S'
 fi
 
 # identify ip for docker bridge interface
 docker_ip=$(ifconfig "${docker_interface}" | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "[DEBUG] Docker IP defined as ${docker_ip}"
+	echo "[DEBUG] Docker IP defined as ${docker_ip}" | ts '%Y-%m-%d %H:%M:%.S'
 fi
 
-docker_dhcp_range="172.17.0.0/16"
+docker_default_range="172.17.0.0/16"
 
 for IP in ${docker_ip}; do
-	grepcidr "$docker_dhcp_range" <(echo "$IP") >/dev/null
+	grepcidr "$docker_default_range" <(echo "$IP") >/dev/null
 	grepcidr_status=$?
 	if [ "${grepcidr_status}" -eq 1 ]; then
 		echo "[ERROR] It seems like the IP the container is using outside the default Docker DHCP range" | ts '%Y-%m-%d %H:%M:%.S'
@@ -38,7 +38,7 @@ done
 # identify netmask for docker bridge interface
 docker_mask=$(ifconfig "${docker_interface}" | grep -o "netmask [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "[DEBUG] Docker netmask defined as ${docker_mask}"
+	echo "[DEBUG] Docker netmask defined as ${docker_mask}" | ts '%Y-%m-%d %H:%M:%.S'
 fi
 
 # convert netmask into cidr format
@@ -72,7 +72,8 @@ echo "--------------------"
 ###
 
 if [[ "${DEBUG}" == "true" ]]; then
-	echo "[DEBUG] Modules currently loaded for kernel" ; lsmod
+	echo "[DEBUG] Modules currently loaded for kernel" | ts '%Y-%m-%d %H:%M:%.S'
+	lsmod
 fi
 
 # check we have iptable_mangle, if so setup fwmark
@@ -121,7 +122,7 @@ if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 		# strip whitespace from start and end of additional_port_item
 		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[INFO] Adding additional incoming port ${additional_port_item} for ${docker_interface}"
+		echo "[INFO] Adding additional incoming port ${additional_port_item} for ${docker_interface}" | ts '%Y-%m-%d %H:%M:%.S'
 
 		# accept input to additional port for "${docker_interface}"
 		iptables -A INPUT -i "${docker_interface}" -p tcp --dport "${additional_port_item}" -j ACCEPT
@@ -175,7 +176,7 @@ if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 		# strip whitespace from start and end of additional_port_item
 		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[INFO] Adding additional outgoing port ${additional_port_item} for ${docker_interface}"
+		echo "[INFO] Adding additional outgoing port ${additional_port_item} for ${docker_interface}" | ts '%Y-%m-%d %H:%M:%.S'
 
 		# accept output to additional port for lan interface
 		iptables -A OUTPUT -o "${docker_interface}" -p tcp --dport "${additional_port_item}" -j ACCEPT
