@@ -40,6 +40,7 @@ RUN apt update \
     zlib1g \
     tzdata \
     iputils-ping \
+    jq \
     && apt-get clean \
     && rm -rf \
     /var/lib/apt/lists/* \

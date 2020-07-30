@@ -37,7 +37,8 @@ $ docker run --privileged  -d \
 |`VPN_ENABLED`| Yes | Enable VPN? (yes/no)|`VPN_ENABLED=yes`|`yes`||
 |`VPN_USERNAME`| No | If username and password provided, configures ovpn file automatically |`VPN_USERNAME=ad8f64c02a2de`||
 |`VPN_PASSWORD`| No | If username and password provided, configures ovpn file automatically |`VPN_PASSWORD=ac98df79ed7fb`||
-|`LAN_NETWORK`| Yes (one at least) | Comma delimited local Network's with CIDR notation |`LAN_NETWORK=192.168.0.0/24,10.10.0.0/24`||
+|`WEBUI_PASSWORD`| Yes | The password used to protect/access Jackett's web interface |`WEBUI_PASSWORD=RJayoLnKPjeyHbo-_ziH`||
+|`LAN_NETWORK`| Yes (atleast one) | Comma delimited local Network's with CIDR notation |`LAN_NETWORK=192.168.0.0/24,10.10.0.0/24`||
 |`NAME_SERVERS`| No | Comma delimited name servers |`NAME_SERVERS=1.1.1.1,1.0.0.1`|`1.1.1.1,1.0.0.1`|
 |`PUID`| No | UID applied to config files and blackhole |`PUID=99`|`99`|
 |`PGID`| No | GID applied to config files and blackhole |`PGID=100`|`100`|
