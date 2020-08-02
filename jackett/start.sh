@@ -17,7 +17,7 @@ if [ ! -e /config/Jackett/ServerConfig.json ]; then
 fi
 
 # Check if the PGID exists, if not create the group with the name 'jackett'
-grep $"${PGID}:" /etc/group
+grep $"${PGID}:" /etc/group > /dev/null 2>&1
 if [ $? -eq 0 ]; then
 	echo "[INFO] A group with PGID $PGID already exists in /etc/group, nothing to do." | ts '%Y-%m-%d %H:%M:%.S'
 else
@@ -26,7 +26,7 @@ else
 fi
 
 # Check if the PUID exists, if not create the user with the name 'jackett', with the correct group
-grep $"${PUID}:" /etc/passwd
+grep $"${PUID}:" /etc/passwd > /dev/null 2>&1
 if [ $? -eq 0 ]; then
 	echo "[INFO] An user with PUID $PUID already exists in /etc/passwd, nothing to do." | ts '%Y-%m-%d %H:%M:%.S'
 else
