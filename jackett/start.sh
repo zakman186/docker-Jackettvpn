@@ -139,7 +139,7 @@ if [ -e /proc/$jackettpid ]; then
 			echo "[ERROR] Network is down, exiting this Docker" | ts '%Y-%m-%d %H:%M:%.S'
 			exit 1
 		fi
-		if [ ! "{$HEALTH_CHECK_SILENT}" -eq 1 ]; then
+		if [ ! "${HEALTH_CHECK_SILENT}" -eq 1 ]; then
 			echo "[INFO] Network is up" | ts '%Y-%m-%d %H:%M:%.S'
 		fi
 		sleep ${INTERVAL}
