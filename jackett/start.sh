@@ -45,6 +45,7 @@ fi
 
 # Set an API Key
 # An API Key is also required for setting a password, that is why this script does it before Jackett initially launces
+# Generation of the API Key is obviously the same as how Jackett itself would do it.
 APIKey=$(cat /config/Jackett/ServerConfig.json | jq -r '.APIKey')
 if [ -z ${APIKey} ]; then
 	echo "[INFO] No APIKey in the ServerConfig.json, this is normal for the first launch" | ts '%Y-%m-%d %H:%M:%.S'
@@ -72,6 +73,8 @@ if [ ! -z "${WEBUI_PASSWORD}" ]; then
 	iconv_status=$?
 	if [[ "${printf_status}" -eq 1 || "${iconv_status}" -eq 1 ]]; then
 		echo "[ERROR] Password contains unsupported characters." | ts '%Y-%m-%d %H:%M:%.S'
+		# Sleep so it wont 'spam restart'
+		sleep 5
 		exit 1
 	fi
 

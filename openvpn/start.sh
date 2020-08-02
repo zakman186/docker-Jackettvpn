@@ -7,7 +7,10 @@ check_network=$(ifconfig | grep docker0 || true)
 
 # if network interface docker0 is present then we are running in host mode and thus must exit
 if [[ ! -z "${check_network}" ]]; then
-	echo "[ERROR] Network type detected as 'Host', this will cause major issues, please stop the container and switch back to 'Bridge' mode" | ts '%Y-%m-%d %H:%M:%.S' && exit 1
+	echo "[ERROR] Network type detected as 'Host', this will cause major issues, please stop the container and switch back to 'Bridge' mode" | ts '%Y-%m-%d %H:%M:%.S'
+	# Sleep so it wont 'spam restart'
+	sleep 10
+	exit 1
 fi
 
 export VPN_ENABLED=$(echo "${VPN_ENABLED}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
@@ -48,6 +51,8 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	# if ovpn file not found in /config/openvpn then exit
 	if [[ -z "${VPN_CONFIG}" ]]; then
 		echo "[ERROR] No OpenVPN config file found in /config/openvpn/. Please download one from your VPN provider and restart this container. Make sure the file extension is '.ovpn'" | ts '%Y-%m-%d %H:%M:%.S'
+		# Sleep so it wont 'spam restart'
+		sleep 10
 		exit 1
 	fi
 
@@ -82,13 +87,18 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		echo "[INFO] VPN remote line defined as '${vpn_remote_line}'" | ts '%Y-%m-%d %H:%M:%.S'
 	else
 		echo "[ERROR] VPN configuration file ${VPN_CONFIG} does not contain 'remote' line, showing contents of file before exit..." | ts '%Y-%m-%d %H:%M:%.S'
-		cat "${VPN_CONFIG}" && exit 1
+		cat "${VPN_CONFIG}"
+		# Sleep so it wont 'spam restart'
+		sleep 10
+		exit 1
 	fi
 	export VPN_REMOTE=$(echo "${vpn_remote_line}" | grep -P -o -m 1 '^[^\s\r\n]+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 	if [[ ! -z "${VPN_REMOTE}" ]]; then
 		echo "[INFO] VPN_REMOTE defined as '${VPN_REMOTE}'" | ts '%Y-%m-%d %H:%M:%.S'
 	else
 		echo "[ERROR] VPN_REMOTE not found in ${VPN_CONFIG}, exiting..." | ts '%Y-%m-%d %H:%M:%.S'
+		# Sleep so it wont 'spam restart'
+		sleep 10
 		exit 1
 	fi
 	export VPN_PORT=$(echo "${vpn_remote_line}" | grep -P -o -m 1 '(?<=\s)\d{2,5}(?=\s)?+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
@@ -96,6 +106,8 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		echo "[INFO] VPN_PORT defined as '${VPN_PORT}'" | ts '%Y-%m-%d %H:%M:%.S'
 	else
 		echo "[ERROR] VPN_PORT not found in ${VPN_CONFIG}, exiting..." | ts '%Y-%m-%d %H:%M:%.S'
+		# Sleep so it wont 'spam restart'
+		sleep 10
 		exit 1
 	fi
 	export VPN_PROTOCOL=$(cat "${VPN_CONFIG}" | grep -P -o -m 1 '(?<=^proto\s)[^\r\n]+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
@@ -122,6 +134,8 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		echo "[INFO] VPN_DEVICE_TYPE defined as '${VPN_DEVICE_TYPE}'" | ts '%Y-%m-%d %H:%M:%.S'
 	else
 		echo "[ERROR] VPN_DEVICE_TYPE not found in ${VPN_CONFIG}, exiting..." | ts '%Y-%m-%d %H:%M:%.S'
+		# Sleep so it wont 'spam restart'
+		sleep 10
 		exit 1
 	fi
 	# get values from env vars as defined by user
@@ -130,6 +144,8 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		echo "[INFO] LAN_NETWORK defined as '${LAN_NETWORK}'" | ts '%Y-%m-%d %H:%M:%.S'
 	else
 		echo "[ERROR] LAN_NETWORK not defined (via -e LAN_NETWORK), exiting..." | ts '%Y-%m-%d %H:%M:%.S'
+		# Sleep so it wont 'spam restart'
+		sleep 10
 		exit 1
 	fi
 	export NAME_SERVERS=$(echo "${NAME_SERVERS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
