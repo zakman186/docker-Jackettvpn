@@ -1,7 +1,11 @@
 [preview]: https://raw.githubusercontent.com/DyonR/docker-templates/master/Screenshots/jackettvpn/jackettvpn-mainpage.png "Jackett Preview"
 
 # Jackett and OpenVPN
+![Docker Pulls](https://img.shields.io/docker/pulls/dyonr/jackettvpn)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dyonr/jackettvpn/latest)  
+
 Docker container which runs the latest headless Jackett Server while connecting to OpenVPN with iptables killswitch to prevent IP leakage when the tunnel goes down.
+
 
 ![alt text][preview]
 
