@@ -48,7 +48,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	# Wildcard search for openvpn config files (match on first result)
 	export VPN_CONFIG=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
 	
-	# if ovpn file not found in /config/openvpn then exit
+	# If ovpn file not found in /config/openvpn then exit
 	if [[ -z "${VPN_CONFIG}" ]]; then
 		echo "[ERROR] No OpenVPN config file found in /config/openvpn/. Please download one from your VPN provider and restart this container. Make sure the file extension is '.ovpn'" | ts '%Y-%m-%d %H:%M:%.S'
 		# Sleep so it wont 'spam restart'
