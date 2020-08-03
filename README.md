@@ -1,17 +1,17 @@
 [preview]: https://raw.githubusercontent.com/DyonR/docker-templates/master/Screenshots/jackettvpn/jackettvpn-mainpage.png "Jackett Preview"
 
-# Jackett and OpenVPN
+# [Jackett](https://github.com/Jackett/Jackett) and OpenVPN
 ![Docker Pulls](https://img.shields.io/docker/pulls/dyonr/jackettvpn)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dyonr/jackettvpn/latest)  
 
-Docker container which runs the latest headless Jackett Server while connecting to OpenVPN with iptables killswitch to prevent IP leakage when the tunnel goes down.
+Docker container which runs the latest headless [Jackett](https://github.com/Jackett/Jackett) Server while connecting to OpenVPN with iptables killswitch to prevent IP leakage when the tunnel goes down.
 
 
 ![alt text][preview]
 
 ## Docker Features
 * Base: Ubuntu 18.04
-* Latest Jackett
+* Latest [Jackett](https://github.com/Jackett/Jackett)
 * Selectively enable or disable OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
 * Specify name servers to add to container
