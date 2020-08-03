@@ -43,6 +43,7 @@ RUN apt update \
     libicu60 \
     grepcidr \
     && apt-get clean \
+    && apt -y autoremove \
     && rm -rf \
     /var/lib/apt/lists/* \
     /tmp/* \

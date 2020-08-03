@@ -141,9 +141,7 @@ fi
 
 if [[ $VPN_ENABLED == "yes" ]]; then
 	echo "[INFO] Starting WireGuard..." | ts '%Y-%m-%d %H:%M:%.S'
-	exec wg-quick up $VPN_CONFIG &
-	echo "[INFO] WireGuard exit code: $?" | ts '%Y-%m-%d %H:%M:%.S'
-	echo "[INFO] Started WireGuard." | ts '%Y-%m-%d %H:%M:%.S'
+	wg-quick up $VPN_CONFIG
 	#exec /bin/bash /etc/openvpn/openvpn.init start &
 	exec /bin/bash /etc/jackett/iptables.sh
 else
