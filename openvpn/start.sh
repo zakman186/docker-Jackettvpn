@@ -36,7 +36,7 @@ if [[ -z "${VPN_TYPE}" ]]; then
 	export VPN_TYPE="openvpn"
 fi
 
-if [[ "${VPN_TYPE}" !=  "wireguard" ]] || [[ "${VPN_TYPE}" != "openvpn" ]] then;
+if [[ "${VPN_TYPE}" !=  "wireguard" || "${VPN_TYPE}" != "openvpn" ]]; then
 	echo "[INFO] VPN_TYPE not set, as 'wireguard' or 'openvpn', defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
 	export VPN_TYPE="openvpn"
 fi
@@ -56,7 +56,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	fi
 
 	# Wildcard search for openvpn config files (match on first result)
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		export VPN_CONFIG=$(find /config/openvpn -maxdepth 1 -name "*.ovpn" -print -quit)
 	else
 		export VPN_CONFIG=$(find /config/wireguard -maxdepth 1 -name "*.conf" -print -quit)
@@ -64,7 +64,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 
 	# If ovpn file not found in /config/openvpn or /config/wireguard then exit
 	if [[ -z "${VPN_CONFIG}" ]]; then
-		if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+		if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 			echo "[ERROR] No OpenVPN config file found in /config/openvpn/. Please download one from your VPN provider and restart this container. Make sure the file extension is '.ovpn'" | ts '%Y-%m-%d %H:%M:%.S'
 		else
 			echo "[ERROR] No WireGuard config file found in /config/wireguard/. Please download one from your VPN provider and restart this container. Make sure the file extension is '.conf'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -74,14 +74,14 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		exit 1
 	fi
 
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		echo "[INFO] OpenVPN config file is found at ${VPN_CONFIG}" | ts '%Y-%m-%d %H:%M:%.S'
 	else
 		echo "[INFO] WireGuard config file is found at ${VPN_CONFIG}" | ts '%Y-%m-%d %H:%M:%.S'
 	fi
 
 	# Read username and password env vars and put them in credentials.conf, then add ovpn config for credentials file
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		if [[ ! -z "${VPN_USERNAME}" ]] && [[ ! -z "${VPN_PASSWORD}" ]]; then
 			if [[ ! -e /config/openvpn/credentials.conf ]]; then
 				touch /config/openvpn/credentials.conf
@@ -106,7 +106,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	/usr/bin/dos2unix "${VPN_CONFIG}" 1> /dev/null
 	
 	# parse values from the ovpn or conf file
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		export vpn_remote_line=$(cat "${VPN_CONFIG}" | grep -P -o -m 1 '(?<=^remote\s)[^\n\r]+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 	else
 		export vpn_remote_line=$(cat "${VPN_CONFIG}" | grep -P -o -m 1 '(?<=^Endpoint\s)[^\n\r]+' | sed -e 's~^[=\ ]*~~')
@@ -122,7 +122,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		exit 1
 	fi
 
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		export VPN_REMOTE=$(echo "${vpn_remote_line}" | grep -P -o -m 1 '^[^\s\r\n]+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 	else
 		export VPN_REMOTE=$(echo "${vpn_remote_line}" | grep -P -o -m 1 '^[^:\r\n]+')
@@ -137,7 +137,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		exit 1
 	fi
 
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		export VPN_PORT=$(echo "${vpn_remote_line}" | grep -P -o -m 1 '(?<=\s)\d{2,5}(?=\s)?+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 	else
 		export VPN_PORT=$(echo "${vpn_remote_line}" | grep -P -o -m 1 '(?<=:)\d{2,5}(?=:)?+')
@@ -152,7 +152,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		exit 1
 	fi
 
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		export VPN_PROTOCOL=$(cat "${VPN_CONFIG}" | grep -P -o -m 1 '(?<=^proto\s)[^\r\n]+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		if [[ ! -z "${VPN_PROTOCOL}" ]]; then
 			echo "[INFO] VPN_PROTOCOL defined as '${VPN_PROTOCOL}'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -175,7 +175,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	fi
 
 
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		VPN_DEVICE_TYPE=$(cat "${VPN_CONFIG}" | grep -P -o -m 1 '(?<=^dev\s)[^\r\n\d]+' | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		if [[ ! -z "${VPN_DEVICE_TYPE}" ]]; then
 			export VPN_DEVICE_TYPE="${VPN_DEVICE_TYPE}0"
@@ -210,7 +210,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		export NAME_SERVERS="1.1.1.1,8.8.8.8,1.0.0.1,8.8.4.4"
 	fi
 
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		export VPN_OPTIONS=$(echo "${VPN_OPTIONS}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 		if [[ ! -z "${VPN_OPTIONS}" ]]; then
 			echo "[INFO] VPN_OPTIONS defined as '${VPN_OPTIONS}'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -248,7 +248,7 @@ if [[ -z "${PGID}" ]]; then
 fi
 
 if [[ $VPN_ENABLED == "yes" ]]; then
-	if [[ "${VPN_TYPE}" == "openvpn" ]] then;
+	if [[ "${VPN_TYPE}" == "openvpn" ]]; then
 		echo "[INFO] Starting OpenVPN..." | ts '%Y-%m-%d %H:%M:%.S'
 		cd /config/openvpn
 		exec openvpn --config ${VPN_CONFIG} &
