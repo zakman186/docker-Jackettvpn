@@ -31,7 +31,7 @@ else
 	sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null 2>&1
 fi
 
-if [[ ! -z "${VPN_TYPE}" ]]; then
+if [[ -z "${VPN_TYPE}" ]]; then
 	echo "[INFO] VPN_TYPE not set, defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
 	export VPN_TYPE="openvpn"
 fi
