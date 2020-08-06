@@ -36,7 +36,7 @@ if [[ -z "${VPN_TYPE}" ]]; then
 	export VPN_TYPE="openvpn"
 fi
 
-if [[ "${VPN_TYPE}" !=  "wireguard" || "${VPN_TYPE}" != "openvpn" ]]; then
+if [[ "${VPN_TYPE}" != "openvpn" && "${VPN_TYPE}" != "wireguard" ]]; then
 	echo "[INFO] VPN_TYPE not set, as 'wireguard' or 'openvpn', defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
 	export VPN_TYPE="openvpn"
 fi
