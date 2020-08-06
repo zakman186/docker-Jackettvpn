@@ -21,6 +21,7 @@ RUN apt update \
     openresolv \
     apt-transport-https \
     wireguard-tools \
+    openvpn \
     ca-certificates \
     wget \
     curl \
@@ -58,10 +59,9 @@ RUN jackett_latest=$(curl --silent "https://api.github.com/repos/Jackett/Jackett
 VOLUME /blackhole /config
 
 ADD openvpn/ /etc/openvpn/
-ADD wireguard/ /etc/wireguard/
 ADD jackett/ /etc/jackett/
 
 RUN chmod +x /etc/jackett/*.sh /etc/jackett/*.init /etc/openvpn/*.sh /opt/Jackett/jackett
 
 EXPOSE 9117
-CMD ["/bin/bash", "/etc/wireguard/start.sh"]
+CMD ["/bin/bash", "/etc/openvpn/start.sh"]
