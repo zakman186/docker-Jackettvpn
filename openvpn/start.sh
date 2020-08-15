@@ -34,7 +34,7 @@ fi
 if [[ $VPN_ENABLED == "yes" ]]; then
 	# Check if VPN_TYPE is set.
 	if [[ -z "${VPN_TYPE}" ]]; then
-		echo "[INFO] VPN_TYPE not set, defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
+		echo "[WARNING] VPN_TYPE not set, defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
 		export VPN_TYPE="openvpn"
 	else
 		echo "[INFO] VPN_TYPE defined as '${VPN_TYPE}'" | ts '%Y-%m-%d %H:%M:%.S'
