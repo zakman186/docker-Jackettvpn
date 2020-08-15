@@ -41,7 +41,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 	fi
 
 	if [[ "${VPN_TYPE}" != "openvpn" && "${VPN_TYPE}" != "wireguard" ]]; then
-		echo "[INFO] VPN_TYPE not set, as 'wireguard' or 'openvpn', defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
+		echo "[WARNING] VPN_TYPE not set, as 'wireguard' or 'openvpn', defaulting to OpenVPN." | ts '%Y-%m-%d %H:%M:%.S'
 		export VPN_TYPE="openvpn"
 	fi
 	# Create the directory to store OpenVPN or WireGuard config files
@@ -196,7 +196,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		fi
 	else
 		export VPN_DEVICE_TYPE="wg0"
-		echo "[INFO] VPN_DEVICE_TYPE set as '${VPN_DEVICE_TYPE}', wince WireGuard will always be wg0." | ts '%Y-%m-%d %H:%M:%.S'
+		echo "[INFO] VPN_DEVICE_TYPE set as '${VPN_DEVICE_TYPE}', since WireGuard will always be wg0." | ts '%Y-%m-%d %H:%M:%.S'
 	fi
 
 	# get values from env vars as defined by user
