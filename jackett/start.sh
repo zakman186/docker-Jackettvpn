@@ -14,6 +14,7 @@ if [ ! -e /config/Jackett/ServerConfig.json ]; then
 	echo "[INFO] ServerConfig.json is missing, this is normal for the first launch! Copying template" | ts '%Y-%m-%d %H:%M:%.S'
 	cp /etc/jackett/ServerConfig.json /config/Jackett/ServerConfig.json
 	chmod 755 /config/Jackett/ServerConfig.json
+	chown ${PUID}:${PGID} /config/Jackett/ServerConfig.json
 fi
 
 # Check if the PGID exists, if not create the group with the name 'jackett'
