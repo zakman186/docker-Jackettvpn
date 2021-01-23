@@ -8,12 +8,11 @@ Docker container which runs the latest headless [Jackett](https://github.com/Jac
 ![alt text][preview]
 
 ## Docker Features
-* Base: Ubuntu 18.04
+* Base: Debian 10-slim
 * Latest [Jackett](https://github.com/Jackett/Jackett)
 * Selectively enable or disable WireGuard or OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
-* Specify name servers to add to container
-* Configure UID and GID for config files and blackhole for Jackett
+* Configurable UID and GID for config files and /blackhole for Jackett
 * Created with [Unraid](https://unraid.net/) in mind
 
 # Run container from Docker registry
