@@ -73,7 +73,7 @@ if [ ! -z "${WEBUI_PASSWORD}" ]; then
 	printf "${WEBUI_PASSWORD}" | iconv -t utf16le > /dev/null 2>&1
 	iconv_status=$?
 	if [[ "${printf_status}" -eq 1 || "${iconv_status}" -eq 1 ]]; then
-		echo "[ERROR] Password contains unsupported characters." | ts '%Y-%m-%d %H:%M:%.S'
+		echo "[ERROR] The WEBUI_PASSWORD environment variable contains unsupported characters." | ts '%Y-%m-%d %H:%M:%.S'
 		# Sleep so it wont 'spam restart'
 		sleep 5
 		exit 1
