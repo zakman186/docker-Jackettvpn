@@ -8,7 +8,7 @@ Docker container which runs the latest headless [Jackett](https://github.com/Jac
 ![alt text][preview]
 
 ## Docker Features
-* Base: Debian 10-slim
+* Base: Debian bullseye-slim
 * Latest [Jackett](https://github.com/Jackett/Jackett)
 * Selectively enable or disable WireGuard or OpenVPN support
 * IP tables kill switch to prevent IP leaking when VPN connection fails
