@@ -1,5 +1,5 @@
 # Jackett, OpenVPN and WireGuard, JackettVPN
-FROM debian:bullseye-slim
+FROM debian:10-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV XDG_DATA_HOME="/config" \
